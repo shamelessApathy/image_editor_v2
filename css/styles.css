@@ -3,3 +3,31 @@ canvas
 	position:absolute;
 	border:1px solid black;
 }
+#ie-image-holder
+{
+	position:absolute;
+	top:500px;
+	left:100px;
+}
+#ie-controls-container
+{
+	position:fixed;
+	top:700px;
+	left:20px;
+	height:100px;
+	width:500px;
+	border:solid 2px red;
+}
+#ie-resize-spec-form
+{
+	display:none;
+	position:relative;
+	top:500px;
+	left:20px;		
+}
+.ie-control
+{
+	width:75px;
+	border-right:solid black 1px;
+	height:98px;
+}
