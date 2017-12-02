@@ -2,7 +2,7 @@
 
 
 
-
+var canvas = document.getElementById('ie-canvas');
 
 
 
@@ -144,8 +144,71 @@ Canvas.prototype.objectifyImage = function(i)
 	orig_image = img_obj;
 	return img_obj;
 };
+Canvas.prototype.canvasState = function(canvas) 
+{
+  
+  // ...
+
+  // I removed some setup code to save space
+  // See the full source at the end
 
 
+  // **** Keep track of state! ****
+  
+  this.valid = false; // when set to true, the canvas will redraw everything
+  this.shapes = [];  // the collection of things to be drawn
+  this.dragging = false; // Keep track of when we are dragging
+  // the current selected object.
+  // In the future we could turn this into an array for multiple selection
+  this.selection = null;
+  this.dragoffx = 0; // See mousedown and mousemove events for explanation
+  this.dragoffy = 0;
+
+  // ...
+  // (We are still in the CanvasState constructor)
+
+  // This is an example of a closure!
+  // Right here "this" means the CanvasState. But we are making events on the Canvas itself,
+  // and when the events are fired on the canvas the variable "this" is going to mean the canvas!
+  // Since we still want to use this particular CanvasState in the events we have to save a reference to it.
+  // This is our reference!
+  var myState = this;
+  this.mousedown = function(e) 
+  {
+  	console.log('in mousedown listener in Canvas.canvasState() fucntion');
+    var mouse = this.getMouse(e);
+    var mx = mouse.x;
+    var my = mouse.y;
+    var shapes = myState.shapes;
+    var l = shapes.length;
+    for (var i = l-1; i >= 0; i--) 
+    {
+      if (shapes[i].contains(mx, my)) 
+      {
+        var mySel = shapes[i];
+        // Keep track of where in the object we clicked
+        // so we can move it smoothly (see mousemove)
+        myState.dragoffx = mx - mySel.x;
+        myState.dragoffy = my - mySel.y;
+        myState.dragging = true;
+        myState.selection = mySel;
+        myState.valid = false;
+        return;
+      }
+    }
+    // havent returned means we have failed to select anything.
+    // If there was an object selected, we deselect it
+    if (myState.selection) 
+    {
+      myState.selection = null;
+      myState.valid = false; // Need to clear the old selection border
+    }
+  }.bind(this)
+  //fixes a problem where double clicking causes text to get selected on the canvas
+  canvas.addEventListener('selectstart', function(e) { e.preventDefault(); return false; }, false);
+  // Up, down, and move are for dragging
+  canvas.addEventListener('mousedown', this.mousedown, true);
+}
 
 /**
 * Get Canvas Description
@@ -157,28 +220,44 @@ Canvas.prototype.toString = function()
 	return 'Canvas("'+ this.id + '")';
 }
 
-	var button_resize_start = $('#ie-start-resize');
-	var button_resize_submit = $('#ie-button-resize');
-	var spec_resize_form = $('#ie-resize-spec-form');
-	console.log('image_editor_v2.js loaded!!');
-	var newCanvas = new Canvas('ie-canvas',0,0);
-	button_resize_start.on('click', function(){
-		$(spec_resize_form).css({"display":"block"});
-	});
-	button_resize_submit.on('click', function(){
-		var new_height = $('#ie-resize-height').val();
-		var new_width = $('#ie-resize-width').val();
 
-		console.log(new_height);
-		console.log(new_width);
-		newCanvas.resize(new_height, new_width);
-		$(spec_resize_form).css({'display':'none'});
+var ImageTools = function()
+{
+	this.init = function()
+	{
+		console.log('image_editor_v2.js loaded!!');
 
-	})
+		this.newCanvas = new Canvas('ie-canvas',0,0);
+		this.newCanvas.canvasState(canvas);
+		this.button_resize_start = $('#ie-start-resize');
+		this.button_resize_submit = $('#ie-button-resize');
+		this.spec_resize_form = $('#ie-resize-spec-form');
+	}
+	this.listeners = function()
+	{
+		this.button_resize_start.on('click', function()
+		{
+			$(this.spec_resize_form).css({"display":"block"});
+		}.bind(this))
+		this.button_resize_submit.on('click', function()
+		{
+			var new_height = $('#ie-resize-height').val();
+			var new_width = $('#ie-resize-width').val();
+
+			console.log(new_height);
+			console.log(new_width);
+			this.newCanvas.resize(new_height, new_width);
+			$(this.spec_resize_form).css({'display':'none'});
+		}.bind(this))
+	}
 	
+	this.init();
+	this.listeners();
+}	
+var image_tools = new ImageTools();
 	
 
-})
+});
 
 
 
