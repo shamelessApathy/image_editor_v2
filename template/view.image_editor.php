@@ -1,7 +1,9 @@
 <h1> You are in the image editor template</h1>
 
 
-<canvas id='ie-canvas'></canvas>
+<canvas id="canvas" width="400" height="300">
+    This text is displayed if your browser does not support HTML5 Canvas.
+   </canvas>
 
 
 
