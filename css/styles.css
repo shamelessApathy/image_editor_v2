@@ -30,4 +30,6 @@ canvas
 	width:75px;
 	border-right:solid black 1px;
 	height:98px;
+	float:left;
+	
 }
