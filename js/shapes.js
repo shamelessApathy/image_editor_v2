@@ -136,6 +136,10 @@ CanvasState.prototype.addShape = function(shape) {
   this.valid = false;
 }
 
+CanvasState.prototype.removeShape = function(shape){
+ console.log(shape);
+}
+
 CanvasState.prototype.clear = function() {
   this.ctx.clearRect(0, 0, this.width, this.height);
 }
@@ -204,26 +208,29 @@ CanvasState.prototype.getMouse = function(e) {
 
 // If you dont want to use <body onLoad='init()'>
 // You could uncomment this init() reference and place the script reference inside the body tag
-//init();
+init();
 
 function init() {
-  var s = new CanvasState(document.getElementById('canvas1'));
-  s.addShape(new Shape(40,40,50,50)); // The default is gray
-  s.addShape(new Shape(60,140,40,60, 'lightskyblue'));
+ // var s = new CanvasState(document.getElementById('canvas1'));
+  //s.addShape(new Shape(40,40,50,50)); // The default is gray
+  //s.addShape(new Shape(60,140,40,60, 'lightskyblue'));
   // Lets make some partially transparent
-  s.addShape(new Shape(80,150,60,30, 'rgba(127, 255, 212, .5)'));
-  s.addShape(new Shape(125,80,30,80, 'rgba(245, 222, 179, .7)'));
+  //s.addShape(new Shape(80,150,60,30, 'rgba(127, 255, 212, .5)'));
+  //s.addShape(new Shape(125,80,30,80, 'rgba(245, 222, 179, .7)'));
 }
-function ImageTools(toolbar)
+function ImageTools(toolbar, canvasState)
 {
-  this.init = function(toolbar)
+  this.init = function(toolbar, canvasState)
   {
     this.canvas = document.getElementById('canvas1');
     this.toolbar = toolbar;
     this.button_start_resize = $('#ie-start-resize');
     this.button_resize = $('#ie-button-resize');
     this.button_draw_selector = $('#ie-draw-selector');
+    this.button_remove_shape = $('#ie-remove-shape');
     this.resize_spec_form =  $('#ie-resize-spec-form');
+    this.canvasState = canvasState;
+
   }
   this.listeners = function()
   {
@@ -241,9 +248,13 @@ function ImageTools(toolbar)
     $(this.button_draw_selector).on('click',function(){
       console.log('in selector mode!');
       document.body.style.cursor = 'crosshair';
-    })
+      this.drawSelectorMode();
+    }.bind(this))
+    $(this.button_remove_shape).on('click',function(){
+      this.removeShape(this.canvasState);
+    }.bind(this))
   }
-  this.init(toolbar);
+  this.init(toolbar, canvasState);
   this.listeners();
 }
 
@@ -253,11 +264,19 @@ ImageTools.prototype.resizeCanvas = function(w,h, canvas)
   canvas.width = w;
 }
 
-ImageTools.prototype.drawSelector = function()
+ImageTools.prototype.drawSelectorMode = function()
 {
+  console.log('inside drawSelectorMode() function');
+}
 
+ImageTools.prototype.removeShape = function(canvas)
+{
+ console.log(canvas.selection);
+ var selectedShape = canvas.selection;
+ canvas.removeShape(selectedShape);
 }
 var toolbar = document.getElementById('ie-tools-container');
-var imagetools = new ImageTools(toolbar);
+var newCanvasState = new CanvasState(document.getElementById('canvas1'));
+var imagetools = new ImageTools(toolbar,newCanvasState);
 
 // Now go make something amazing!

@@ -22,4 +22,7 @@
 	<div class='ie-control'>
 		<button id='ie-draw-selector'>Draw Selector</button>
 	</div>
+	<div class='ie-control'>
+		<button id='ie-remove-shape'>Remove Selected</button>
+	</div>
 </div> 
