@@ -136,7 +136,7 @@ function CanvasState(canvas) {
 
 CanvasState.prototype.addShape = function(shape) {
   this.shapes.push(shape);
-  var shapeString = "<div class='ie-shape-desc' data-shapeid='"+shape.id+"'>Shape ID:" + shape.id +"</div>";
+  var shapeString = "<div class='ie-shape-desc' id='shape"+shape.id+"' data-shapeid='"+shape.id+"'>Shape ID:" + shape.id +"</div>";
   var shapeContainer = $('#ie-shapes-container').html();
   $('#ie-shapes-container').html(shapeContainer + shapeString);
   this.valid = false;
@@ -158,6 +158,8 @@ CanvasState.prototype.removeShape = function(shape)
       console.log(this.shapes);
       this.shapes.splice(i,1);
       console.log(this.shapes)
+      var shapeIdString = "#shape"+shape.id;
+      $(shapeIdString).remove();
       this.valid = false;
     }
   }
@@ -286,10 +288,51 @@ ImageTools.prototype.resizeCanvas = function(w,h, canvas)
   canvas.height = h;
   canvas.width = w;
 }
+ImageTools.prototype.dragSelector = function()
+{
 
-ImageTools.prototype.drawSelectorMode = function()
+}
+ImageTools.prototype.listenForSelectorClick = function()
+{
+    var drag = false;
+  $(this.canvas).on('mousedown',function(e){
+    drag = true;
+    var coords = this.canvasState.getMouse(e);
+    var thickness = $('#ie-selector-thickness').val();
+    if (thickness == null || thickness === "")
+    {
+      thickness = 1;
+    }
+    // create new shape on mousedown event
+    var newShape = new Shape(coords.x,coords.y,1,thickness,'#333')
+    var shapeId = newShape.id;
+    this.canvasState.addShape(newShape);
+
+    // Adding mousemove listener function
+    $(this.canvas).on('mousemove', function(e){
+      if (drag === true)
+      {
+        //while dragging is true, continue to add to shape.x equalto mouse.x
+        console.log('inside dragging function');
+        var current = this.canvasState.getMouse(e);
+        var offsetX = newShape.x + current.x;
+        console.log(offsetX);
+        newShape.w = offsetX;
+        this.canvasState.valid = false;         
+      }
+    }.bind(this))
+  }.bind(this));
+  $(this.canvas).on('mouseup', function(e){
+    console.log('mouse is up now!');
+    drag = false;
+  });
+}
+
+// Puts ImageTools into selector mode
+ImageTools.prototype.drawSelectorMode = function(e)
 {
   console.log('inside drawSelectorMode() function');
+  this.listenForSelectorClick();
 }
 
 ImageTools.prototype.removeShape = function(canvas)
