@@ -9,6 +9,7 @@
 
 // Constructor for Shape objects to hold data for all drawn objects.
 // For now they will just be defined as rectangles.
+var shape_counter = 0;
 function Shape(x, y, w, h, fill) {
   // This is a very simple and unsafe constructor. All we're doing is checking if the values exist.
   // "x || 0" just means "if there is a value for x, use that. Otherwise use 0."
@@ -18,6 +19,8 @@ function Shape(x, y, w, h, fill) {
   this.w = w || 1;
   this.h = h || 1;
   this.fill = fill || '#AAAAAA';
+  this.id =  "id" + shape_counter;
+  shape_counter++;
 }
 
 // Draws this shape to a given context
@@ -133,11 +136,31 @@ function CanvasState(canvas) {
 
 CanvasState.prototype.addShape = function(shape) {
   this.shapes.push(shape);
+  var shapeString = "<div class='ie-shape-desc' data-shapeid='"+shape.id+"'>Shape ID:" + shape.id +"</div>";
+  var shapeContainer = $('#ie-shapes-container').html();
+  $('#ie-shapes-container').html(shapeContainer + shapeString);
   this.valid = false;
 }
 
-CanvasState.prototype.removeShape = function(shape){
- console.log(shape);
+CanvasState.prototype.removeShape = function(shape)
+{
+  function typeOf(obj) 
+  {
+    return {}.toString.call(obj).split(' ')[1].slice(0, -1).toLowerCase();
+  }
+  var l = (this.shapes.length);
+  for (var i = 0; i < l; i++ )
+  {
+    var id = this.shapes[i].id;
+    if (id === shape.id)
+    {
+      var index = i;
+      console.log(this.shapes);
+      this.shapes.splice(i,1);
+      console.log(this.shapes)
+      this.valid = false;
+    }
+  }
 }
 
 CanvasState.prototype.clear = function() {
@@ -271,7 +294,6 @@ ImageTools.prototype.drawSelectorMode = function()
 
 ImageTools.prototype.removeShape = function(canvas)
 {
- console.log(canvas.selection);
  var selectedShape = canvas.selection;
  canvas.removeShape(selectedShape);
 }

@@ -26,3 +26,9 @@
 		<button id='ie-remove-shape'>Remove Selected</button>
 	</div>
 </div> 
+
+
+
+<div id='ie-shapes-container'>
+	<h4>This is the shape container</h4>
+</div>

@@ -33,3 +33,12 @@ canvas
 	float:left;
 	
 }
+#ie-shapes-container
+{
+	width:500px;
+	height:200px;
+	border:1px solid blue;
+	position:fixed;
+	bottom:0;
+	right:20px;
+}
