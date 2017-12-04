@@ -42,3 +42,19 @@ canvas
 	bottom:0;
 	right:20px;
 }
+#ie-tracker-selected
+{
+	color:red;
+	position:relative;
+	margin-left:10px;
+	display:none;
+}
+
+.ie-shape-desc
+{
+	width:100px;
+	height:100px;
+	border:1px solid black;
+	float:left;
+	margin-left:5px;
+}

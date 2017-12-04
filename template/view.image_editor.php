@@ -37,4 +37,5 @@
 
 <div id='ie-shapes-container'>
 	<h4>This is the shape container</h4>
+	<p id='ie-tracker-selected'>SELECTED</p>
 </div>

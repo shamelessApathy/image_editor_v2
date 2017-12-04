@@ -1,4 +1,4 @@
-// By Simon Sarris  :: EDited by Brian Moniz to include more functionality
+// By Simon Sarris
 // www.simonsarris.com
 // sarris@acm.org
 //
@@ -6,17 +6,6 @@
 //
 // Free to use and distribute at will
 // So long as you are nice to people, etc
-
-
-// Constructor for new layer
-function Layer(canvas)
-{
-  var color = $('#ie-layer-color').val();
-  newShape = new Shape(0,0,canvas.width,canvas.height, color);
-  canvas.addShape(newShape);
-  newShape.type = 'layer';  
-}
-
 
 // Constructor for Shape objects to hold data for all drawn objects.
 // For now they will just be defined as rectangles.
@@ -31,7 +20,6 @@ function Shape(x, y, w, h, fill) {
   this.h = h || 1;
   this.fill = fill || '#AAAAAA';
   this.id =  "id" + shape_counter;
-  this.type = "";
   shape_counter++;
 }
 
@@ -82,7 +70,7 @@ function CanvasState(canvas) {
   this.dragoffy = 0;
   
   // **** Then events! ****
-  
+ 
   // This is an example of a closure!
   // Right here "this" means the CanvasState. But we are making events on the Canvas itself,
   // and when the events are fired on the canvas the variable "this" is going to mean the canvas!
@@ -100,6 +88,8 @@ function CanvasState(canvas) {
     var shapes = myState.shapes;
     var l = shapes.length;
     for (var i = l-1; i >= 0; i--) {
+      // remove the "selected" warning from the watcher area
+      var selected_div = document.getElementById('ie-tracker-selected');
       if (shapes[i].contains(mx, my)) {
         var mySel = shapes[i];
         // Keep track of where in the object we clicked
@@ -108,6 +98,11 @@ function CanvasState(canvas) {
         myState.dragoffy = my - mySel.y;
         myState.dragging = true;
         myState.selection = mySel;
+        console.log(shapes[i]);
+        var shape_string = "shape"+shapes[i].id;
+        var shape_tracker = document.getElementById(shape_string);
+        shape_tracker.append(selected_div);
+        $(selected_div).show();
         myState.valid = false;
         return;
       }
@@ -175,12 +170,6 @@ CanvasState.prototype.removeShape = function(shape)
       this.valid = false;
     }
   }
-}
-CanvasState.prototype.resize = function(w,h)
-{
-  this.canvas.width = w;
-  this.canvas.height = h;
-  this.valid =false;
 }
 
 CanvasState.prototype.clear = function() {
@@ -254,43 +243,10 @@ CanvasState.prototype.getMouse = function(e) {
 init();
 
 function init() {
- // var s = new CanvasState(document.getElementById('canvas1'));
-  //s.addShape(new Shape(40,40,50,50)); // The default is gray
-  //s.addShape(new Shape(60,140,40,60, 'lightskyblue'));
-  // Lets make some partially transparent
-  //s.addShape(new Shape(80,150,60,30, 'rgba(127, 255, 212, .5)'));
-  //s.addShape(new Shape(125,80,30,80, 'rgba(245, 222, 179, .7)'));
+ var s = new CanvasState(document.getElementById('canvas1'));
+  s.addShape(new Shape(40,40,50,50)); // The default is gray
+  s.addShape(new Shape(60,140,40,60, 'lightskyblue'));
+   //Lets make some partially transparent
+  s.addShape(new Shape(80,150,60,30, 'rgba(127, 255, 212, .5)'));
+  s.addShape(new Shape(125,80,30,80, 'rgba(245, 222, 179, .7)'));
 }
-
-function ImageTools(canvas)
-{
-  this.init = function()
-  {
-    this.canvas = canvas;
-    this.canvasState = new CanvasState(this.canvas);
-    this.button_new_layer = $('#ie-new-layer');
-    this.button_open_resize = $('#ie-start-resize');
-    this.button_resize = $('#ie-button-resize');
-  }
-  this.listeners = function()
-  {
-    // New layer 
-    $(this.button_new_layer).on('click', function(){
-      var newLayer = new Layer(this.canvasState);
-      console.log(newLayer);
-    }.bind(this))
-    // Resize Canvas
-    $(this.button_open_resize).on('click', function(){
-      $('#ie-resize-spec-form').show();
-    })
-    $(this.button_resize).on('click', function(){
-      var height = $('#ie-resize-height').val();
-      var width = $('#ie-resize-width').val()
-      this.canvasState.resize(width,height);
-      $('#ie-resize-spec-form').hide();
-    }.bind(this))
-  }
-  this.init();
-  this.listeners();
-}
-var imagetools = new ImageTools(document.getElementById('canvas1'));
