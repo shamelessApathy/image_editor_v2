@@ -9,6 +9,7 @@
 
 // Constructor for Shape objects to hold data for all drawn objects.
 // For now they will just be defined as rectangles.
+var s;
 var shape_counter = 0;
 function Shape(x, y, w, h, fill) {
   // This is a very simple and unsafe constructor. All we're doing is checking if the values exist.
@@ -166,6 +167,8 @@ CanvasState.prototype.removeShape = function(shape)
       this.shapes.splice(i,1);
       console.log(this.shapes)
       var shapeIdString = "#shape"+shape.id;
+      var shapes_container = $('#ie-shapes-container');
+      $('#ie-tracker-selected').appendTo(shapes_container);
       $(shapeIdString).remove();
       this.valid = false;
     }
@@ -243,10 +246,36 @@ CanvasState.prototype.getMouse = function(e) {
 init();
 
 function init() {
- var s = new CanvasState(document.getElementById('canvas1'));
+  s = new CanvasState(document.getElementById('canvas1'));
   s.addShape(new Shape(40,40,50,50)); // The default is gray
   s.addShape(new Shape(60,140,40,60, 'lightskyblue'));
    //Lets make some partially transparent
   s.addShape(new Shape(80,150,60,30, 'rgba(127, 255, 212, .5)'));
   s.addShape(new Shape(125,80,30,80, 'rgba(245, 222, 179, .7)'));
 }
+
+function ImageTools(canvas)
+{
+  this.canvas = canvas;
+  this.canvasState = s;
+  this.button_new_layer = $('#ie-new-layer');
+  this.button_remove_selected = $('#ie-remove-shape');
+  $(this.button_new_layer).on('click', this.newLayer);
+  $(this.button_remove_selected).on('click', this.removeSelected);
+
+}
+
+ImageTools.prototype.newLayer = function()
+{
+  var newShape = new Shape(0,0,s.width,s.height,'red');
+  s.addShape(newShape);
+  console.log('in the new layer function!');
+}
+
+ImageTools.prototype.removeSelected = function()
+{
+  var selected = s.selection;
+  s.removeShape(selected);
+}
+
+var imagetools = new ImageTools(document.getElementById('canvas1'));
