@@ -12,7 +12,7 @@
 var s;
 var selector_canvas;
 var shape_counter = 0;
-function Shape(x, y, w, h, fill) {
+function Shape(x, y, w, h, fill, canvas) {
   // This is a very simple and unsafe constructor. All we're doing is checking if the values exist.
   // "x || 0" just means "if there is a value for x, use that. Otherwise use 0."
   // But we aren't checking anything else! We could put "Lalala" for the value of x 
@@ -22,6 +22,7 @@ function Shape(x, y, w, h, fill) {
   this.h = h || 1;
   this.fill = fill || '#AAAAAA';
   this.id =  "id" + shape_counter;
+  this.canvas_id = canvas;
   shape_counter++;
 }
 
@@ -265,6 +266,7 @@ function ImageTools(canvas)
   this.button_new_layer = $('#ie-new-layer');
   this.button_remove_selected = $('#ie-remove-shape');
   this.button_selector_mode = $('#ie-selector-mode');
+  this.button_selector_mode_off = $('#ie-select-mode-off'); 
   $(this.button_new_layer).on('click', this.selectorMode);
   $(this.button_remove_selected).on('click', this.removeSelected);
   $(this.button_selector_mode).on('click', this.selectorMode);
@@ -282,7 +284,7 @@ ImageTools.prototype.selectorMode = function()
   // Set Selector mode to ture (reference it later I'm sure)
   selectorCanvas = document.getElementById('selector-canvas');
   // Create canvas state for selector mode
-
+  this.selector_ctx = selectorCanvas.getContext('2d');
   this.selector_mode = true;
   var selectorCanvasState = new CanvasState(selectorCanvas);
   bState.zIndex(selectorCanvas, 100);
@@ -291,12 +293,17 @@ ImageTools.prototype.selectorMode = function()
   bState.drawSelector(selectorCanvasState);
 }
 
+
 /**
 * While in selectorMode needs to turn fof all event listeners for CanvasState
 * 
 *
 */
 
+ImageTools.prototype.selectorModeOff = function()
+{
+
+}
 
 /**
 *
@@ -306,31 +313,37 @@ ImageTools.prototype.selectorMode = function()
 */
 ImageTools.prototype.drawSelector = function(selectorCanvasState)
 {
-
+  this.mouseDown = false;
     this.selectorShape;
+    var drawSelectorMove = function(e)
+    {
+      console.log('inside mousemove function');
+              var coords = selectorCanvasState.getMouse(e);
+              var mouseX = coords.x
+              var mouseY = coords.y;
+              var offsetX = mouseX - this.selectorShape.x;
+              var offsetY = mouseY - this.selectorShape.y;
+              console.log(offsetX);
+              this.selectorShape.w = offsetX;
+              this.selectorShape.h = offsetY;
+              selectorCanvasState.valid = false;
+    }
     $(selectorCanvas).on('mousedown', function(e)
     {
+      this.mouseDown = true;
       console.log('inside mousedown function in drawselector');
       console.log(selectorCanvasState.getMouse(e));
       e.stopPropagation();
       var coords = selectorCanvasState.getMouse(e);
-      this.selectorShape = new Shape(coords.x,coords.y,0,0,'#333');
+      this.selectorShape = new Shape(coords.x,coords.y,1,1,'rgba(225,225,225,0.5)',selectorCanvas.id);
       // MAke sure to add the shape to the shapes array in CanvasState class
       selectorCanvasState.addShape(this.selectorShape);
       console.log(selectorCanvasState.shapes);
       // keep it inside this mousedown function
-          $(selectorCanvas).on('mousemove', function(e)
-          {
-            console.log('inside mousemove function');
-              var coords = selectorCanvasState.getMouse(e);
-              var mouseX = coords.x
-              var mouseY = coords.y;
-              var offsetX = this.selectorShape.x + mouseX;
-              var offsetY = this.selectorShape.y + mouseY;
-              console.log(offsetX);
-              this.selectorShape.w = offsetX;
-              this.selectorShape.h = offsetY;
-          });
+      if (this.mouseDown = true)
+      {
+        selectorCanvas.addEventListener('mousemove', drawSelectorMove);
+      }
       e.stopPropagation();
     });
 
@@ -338,6 +351,9 @@ ImageTools.prototype.drawSelector = function(selectorCanvasState)
     {
       console.log('inside mouseup funciton');
       this.mouseDown = false;
+      bState.zIndex(selectorCanvas, -1);
+
+      e.stopPropagation();
     });
 
 }
@@ -373,10 +389,10 @@ ImageTools.prototype.newLayer = function(canvasState)
 * Uses CanvasState.prototype.removeShape (That I wrote on top) to remove the shape form the array of shapes that is drawn by the loop
 *
 */
-ImageTools.prototype.removeSelected = function()
+ImageTools.prototype.removeSelected = function(canvasState)
 {
-  var selected = s.selection;
-  s.removeShape(selected);
+  var selected = canvasState.selection;
+  canvasState.removeShape(selected);
 }
 
 var imagetools = new ImageTools(document.getElementById('canvas1'));

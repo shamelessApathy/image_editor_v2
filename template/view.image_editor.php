@@ -23,8 +23,7 @@
 	</div>
 	<div class='ie-control'>
 		<button id='ie-selector-mode'>Draw Selector</button>
-		<label>Thickness</label><br>
-		<input style='width:50px;' id='ie-selector-thickness' type='number'/>
+		<button id='ie-selector-mode-off'>Selector Off</button>
 	</div>
 	<div class='ie-control'>
 		<button id='ie-remove-shape'>Remove Selected</button>
