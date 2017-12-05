@@ -10,6 +10,7 @@
 // Constructor for Shape objects to hold data for all drawn objects.
 // For now they will just be defined as rectangles.
 var s;
+var selector_canvas;
 var shape_counter = 0;
 function Shape(x, y, w, h, fill) {
   // This is a very simple and unsafe constructor. All we're doing is checking if the values exist.
@@ -257,21 +258,121 @@ function init() {
 function ImageTools(canvas)
 {
   this.canvas = canvas;
+  this.selector_mode = false;
+  // Original Canvas State
   this.canvasState = s;
+  this.selectorCanvas = document.getElementById('selector-canvas');
   this.button_new_layer = $('#ie-new-layer');
   this.button_remove_selected = $('#ie-remove-shape');
-  $(this.button_new_layer).on('click', this.newLayer);
+  this.button_selector_mode = $('#ie-selector-mode');
+  $(this.button_new_layer).on('click', this.selectorMode);
   $(this.button_remove_selected).on('click', this.removeSelected);
+  $(this.button_selector_mode).on('click', this.selectorMode);
+  bState = this;
+}
+
+/**
+*
+* ImageTools.prototype.selectMode() 
+* will turn on selector mdoe, which will add a new cancas element directly positioned above the canvas1 element
+* #selector-canvas
+*/
+ImageTools.prototype.selectorMode = function()
+{
+  // Set Selector mode to ture (reference it later I'm sure)
+  selectorCanvas = document.getElementById('selector-canvas');
+  // Create canvas state for selector mode
+
+  this.selector_mode = true;
+  var selectorCanvasState = new CanvasState(selectorCanvas);
+  bState.zIndex(selectorCanvas, 100);
+  console.log(selectorCanvas);
+  console.log(selectorCanvasState);
+  bState.drawSelector(selectorCanvasState);
+}
+
+/**
+* While in selectorMode needs to turn fof all event listeners for CanvasState
+* 
+*
+*/
+
+
+/**
+*
+* ImageTools.prototype.drawSelector()
+* @param selectorCanvas, z-index of 100 to make sure it's not touching lower canvas(s)
+*
+*/
+ImageTools.prototype.drawSelector = function(selectorCanvasState)
+{
+
+    this.selectorShape;
+    $(selectorCanvas).on('mousedown', function(e)
+    {
+      console.log('inside mousedown function in drawselector');
+      console.log(selectorCanvasState.getMouse(e));
+      e.stopPropagation();
+      var coords = selectorCanvasState.getMouse(e);
+      this.selectorShape = new Shape(coords.x,coords.y,0,0,'#333');
+      // MAke sure to add the shape to the shapes array in CanvasState class
+      selectorCanvasState.addShape(this.selectorShape);
+      console.log(selectorCanvasState.shapes);
+      // keep it inside this mousedown function
+          $(selectorCanvas).on('mousemove', function(e)
+          {
+            console.log('inside mousemove function');
+              var coords = selectorCanvasState.getMouse(e);
+              var mouseX = coords.x
+              var mouseY = coords.y;
+              var offsetX = this.selectorShape.x + mouseX;
+              var offsetY = this.selectorShape.y + mouseY;
+              console.log(offsetX);
+              this.selectorShape.w = offsetX;
+              this.selectorShape.h = offsetY;
+          });
+      e.stopPropagation();
+    });
+
+    $(selectorCanvas).on('mouseup', function(e)
+    {
+      console.log('inside mouseup funciton');
+      this.mouseDown = false;
+    });
 
 }
 
-ImageTools.prototype.newLayer = function()
+/**
+* ImageTools.prototype.zIndex()
+* @param z-index
+* @param element
+*/
+ImageTools.prototype.zIndex = function(element, param)
+{
+  $(element).css({"z-index":param});
+}
+
+
+
+/**
+*
+* Creates a new layer using canvas state width and height (s)
+*
+*/
+ImageTools.prototype.newLayer = function(canvasState)
 {
   var newShape = new Shape(0,0,s.width,s.height,'red');
-  s.addShape(newShape);
+  canvasState.addShape(newShape);
   console.log('in the new layer function!');
 }
 
+
+
+/**
+*
+* Uses CanvasState.prototype.removeShape (That I wrote on top) to remove the shape form the array of shapes that is drawn by the loop
+*
+*/
 ImageTools.prototype.removeSelected = function()
 {
   var selected = s.selection;

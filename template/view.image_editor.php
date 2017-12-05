@@ -1,3 +1,4 @@
+<div class='container'>
 <h1> You are in the image editor template</h1>
 
 
@@ -21,7 +22,7 @@
 		</div>
 	</div>
 	<div class='ie-control'>
-		<button id='ie-draw-selector'>Draw Selector</button>
+		<button id='ie-selector-mode'>Draw Selector</button>
 		<label>Thickness</label><br>
 		<input style='width:50px;' id='ie-selector-thickness' type='number'/>
 	</div>
@@ -39,4 +40,5 @@
 <div id='ie-shapes-container'>
 	<h4>This is the shape container</h4>
 	<p id='ie-tracker-selected'>SELECTED</p>
+</div>
 </div>

@@ -3,6 +3,10 @@ canvas
 	position:absolute;
 	border:1px solid black;
 }
+.container
+{
+	width:100%;
+}
 #ie-image-holder
 {
 	position:absolute;
@@ -60,7 +64,6 @@ canvas
 }
 #selector-canvas
 {
-	display:none;
-	z-index:10;
+	z-index:-1;
 	/* higher z-index so as not to interact with the lower canvas1 element?? */
 }
