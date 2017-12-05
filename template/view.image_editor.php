@@ -24,6 +24,7 @@
 	<div class='ie-control'>
 		<button id='ie-selector-mode'>Draw Selector</button>
 		<button id='ie-selector-mode-off'>Selector Off</button>
+		<button id='ie-clear-selector'>Clear</button>
 	</div>
 	<div class='ie-control'>
 		<button id='ie-remove-shape'>Remove Selected</button>

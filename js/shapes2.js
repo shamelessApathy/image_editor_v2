@@ -267,12 +267,25 @@ function ImageTools(canvas)
   this.button_remove_selected = $('#ie-remove-shape');
   this.button_selector_mode = $('#ie-selector-mode');
   this.button_selector_mode_off = $('#ie-select-mode-off'); 
+  this.button_clear_selector = $('#ie-clear-selector');
   $(this.button_new_layer).on('click', this.selectorMode);
   $(this.button_remove_selected).on('click', this.removeSelected);
   $(this.button_selector_mode).on('click', this.selectorMode);
+  $(this.button_clear_selector).on('click', function(){
+    this.clear(this.selectorCanvas);
+  }.bind(this));
   bState = this;
 }
-
+/**
+* ImageTools.prototype.clear(canvas)
+* clears the given canvas
+* @param canvas
+*/
+ImageTools.prototype.clear = function(canvas)
+{
+  var ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
 /**
 *
 * ImageTools.prototype.selectMode() 
