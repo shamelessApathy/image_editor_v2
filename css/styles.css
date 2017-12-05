@@ -58,3 +58,9 @@ canvas
 	float:left;
 	margin-left:5px;
 }
+#selector-canvas
+{
+	display:none;
+	z-index:10;
+	/* higher z-index so as not to interact with the lower canvas1 element?? */
+}
