@@ -19,7 +19,7 @@ canvas
 	top:700px;
 	left:20px;
 	height:100px;
-	width:500px;
+	width:800px;
 	border:solid 2px red;
 }
 #ie-resize-spec-form
@@ -31,7 +31,7 @@ canvas
 }
 .ie-control
 {
-	width:75px;
+	width:175px;
 	border-right:solid black 1px;
 	height:98px;
 	float:left;

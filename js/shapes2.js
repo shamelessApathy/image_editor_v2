@@ -104,6 +104,7 @@ function CanvasState(canvas) {
         myState.selection = mySel;
         console.log(shapes[i]);
         var shape_string = "shape"+shapes[i].id;
+        console.log(shape_string);
         var shape_tracker = document.getElementById(shape_string);
         shape_tracker.append(selected_div);
         $(selected_div).show();
@@ -147,7 +148,7 @@ function CanvasState(canvas) {
 
 CanvasState.prototype.addShape = function(shape) {
   this.shapes.push(shape);
-  var shapeString = "<div class='ie-shape-desc' id='shape"+shape.id+"' data-shapeid='"+shape.id+"'>Shape ID:" + shape.id +"<button class='ie-layer-up' id='shape-"+shape.id+"'>UP</button></div>";
+  var shapeString = "<div class='ie-shape-desc' id='shape"+shape.id+"' data-shapeid='"+shape.id+"'>Shape ID:" + shape.id +"<button class='ie-layer-up' id='shape-"+shape.id+"'>UP</button><button class='ie-layer-down'>DOWN</button><span style='display:block; width:100%; height:20px; background-color:"+shape.fill+";' class='ie-color'></span></div>";
   var shapeContainer = $('#ie-shapes-container').html();
   $('#ie-shapes-container').html(shapeContainer + shapeString);
   this.valid = false;
@@ -253,8 +254,8 @@ function init() {
   s.addShape(new Shape(40,40,50,50, "#4286f4")); // The default is gray
   s.addShape(new Shape(60,140,40,60, '#dcf442'));
    //Lets make some partially transparent
-  s.addShape(new Shape(80,150,60,30, 'rgba(127, 255, 212, .5)'));
-  s.addShape(new Shape(125,80,30,80, 'rgba(245, 222, 179, .7)'));
+  s.addShape(new Shape(80,150,60,30, 'rgba(127, 255, 212, 1)'));
+  s.addShape(new Shape(125,80,30,80, 'rgba(245, 222, 179, 1)'));
 }
 
 function ImageTools(canvas)
@@ -277,6 +278,7 @@ function ImageTools(canvas)
   }.bind(this));
   bState = this;
 }
+
 /**
 * ImageTools.prototype.clear(canvas)
 * clears the given canvas
@@ -388,18 +390,118 @@ ImageTools.prototype.compare =  function(a,b)
 }
 
 
+ImageTools.prototype.moveTrackerBox =  function(element,direction)
+{
+  if (direction === 'down')
+  {
+    sibling = element.nextSibling;
+    $(element).insertAfter(sibling); 
+  }
+  if (direction === 'up')
+  {
+    console.log('figure out what to do inside direction === up');
+  }
+}
+/**
+* ImageTools.prototype.findLayer(shapeID)
+* @param shapeID - id string of the shape we are looking for
+* @return the layer value of the selected shape
+*
+*/
+ImageTools.prototype.findLayer = function(shapeID)
+{
+  for (var i = 0; i < s.shapes.length; i++)
+  {
+    var test = (s.shapes[i].id === shapeID);
+    if (test)
+    {
+      return s.shapes[i].layer;
+    }
+  }
+}
 
+ImageTools.prototype.findShape = function(shapeID)
+{
+  for (var i = 0; i < s.shapes.length; i++)
+  {
+    var test = (s.shapes[i].id === shapeID);
+    if (test)
+    {
+      return s.shapes[i];
+    }
+  }
+}
+
+ImageTools.prototype.changeLayer = function(shape, direction)
+{
+  if (direction === 'up')
+  {
+
+  }
+
+}
+
+
+ImageTools.prototype.shapeByLayer = function(layer)
+{
+  for (var i = 0; i < s.shapes.length; i++)
+  {
+
+    var test = s.shapes[i].layer;
+
+    if ( test === layer)
+    {
+      console.log('in the if part of the shapeByLayer function');
+      return s.shapes[i];
+    }
+  }
+}
+
+/**
+* ImageTools.prototype.layerPriorityDown
+* Changes how draw array is sorted, layer properties on shape object
+*
+*/
+
+ImageTools.prototype.layerPriorityDown = function(e)
+{
+  console.log('inside priorityDown func');
+}
+
+
+/**
+* ImageTools.prototype.layerPriorityUp
+* Changes how draw array is sorted, changes layer value in shape objects
+*
+*/
 ImageTools.prototype.layerPriorityUp = function(e)
 {
 
   var shapeb4 = s.shapes;
-
+  var spec_shape_length = s.shapes.length - 1;
   var target = e.target;
+  var parent = target.parentNode;
   var shapeID = target.id;
   var shapeID = shapeID.split('-');
   var shapeID = shapeID[1];
+  var layer = bState.findLayer(shapeID);
+  console.log(layer);
+  var actualShape = bState.findShape(shapeID);
+  // Make sure layer isn't already at the top
+  if (layer === (s.shapes.length -1))
+  {
+    alert('you can\'t move it up, its at the top!');
+  }
+  console.log(layer);
+  var newLayer = layer+1;
+  console.log(newLayer);
+  var changeShape = bState.shapeByLayer(newLayer);
+
+  // Move trackerbox to proper position
+  bState.moveTrackerBox(parent, 'down');
 
 
+  // Some tricks to make the layers be sorted properly in the array for drawing
   for (var i = 0; i < s.shapes.length; i++)
   {
     if (s.shapes[i].id === shapeID)
@@ -449,7 +551,17 @@ ImageTools.prototype.zIndex = function(element, param)
 ImageTools.prototype.newLayer = function()
 {
   var color = $('#ie-layer-color').val();
-  var newShape = new Shape(0,0,s.width,s.height,color);
+  var newHeight = $('#ie-layer-height').val();
+  var newWidth = $('#ie-layer-width').val();
+  if (newHeight === null)
+  {
+    newHeight = 10;
+  }
+  if (newWidth === null)
+  {
+    newWidth = 10;
+  }
+  var newShape = new Shape(0,0,newWidth,newHeight,color);
   s.addShape(newShape);
   console.log('in the new layer function!');
 }
@@ -484,8 +596,13 @@ for (var i=0; i < length; i++ )
 {
   imagetools.createListener(upButtons[i],'click',imagetools.layerPriorityUp);
 }
-console.log('logging all shapes one by one in for loop');
-for (var i = 0; i < s.shapes.length; i++)
+
+
+var downButtons = document.getElementsByClassName('ie-layer-down');
+for (var i= 0; i < downButtons.length; i++)
 {
-  console.log(s.shapes[i]);
+  imagetools.createListener(downButtons[i], 'click', imagetools.layerPriorityDown);
 }
+
+console.log(s.shapes);
+

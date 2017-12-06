@@ -30,8 +30,10 @@
 		<button id='ie-remove-shape'>Remove Selected</button>
 	</div>
 	<div class='ie-control'>
-		<button id='ie-new-layer'>New Layer</button>
-		<input type='text' id='ie-layer-color'/>
+		<button id='ie-new-layer'>New Layer</button><br>
+		<input type='text' id='ie-layer-color' placeholder='color'/>
+		<input type='number' id='ie-layer-width' placeholder='width'/>
+		<input type='number' id='ie-layer-height' placeholder='height'/>
 	</div>
 </div> 
 
