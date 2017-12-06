@@ -148,7 +148,7 @@ function CanvasState(canvas) {
 
 CanvasState.prototype.addShape = function(shape) {
   this.shapes.push(shape);
-  var shapeString = "<div class='ie-shape-desc' id='shape"+shape.id+"' data-shapeid='"+shape.id+"'>Shape ID:" + shape.id +"<button class='ie-layer-up' id='shape-"+shape.id+"'>UP</button><button class='ie-layer-down'>DOWN</button><span style='display:block; width:100%; height:20px; background-color:"+shape.fill+";' class='ie-color'></span></div>";
+  var shapeString = "<div class='ie-shape-desc' id='shape"+shape.id+"' data-shapeid='"+shape.id+"'>Shape ID:" + shape.id +"<button class='ie-layer-up' id='shape-"+shape.id+"'>UP</button><button id='shape-"+shape.id+"' class='ie-layer-down'>DOWN</button><span style='display:block; width:100%; height:20px; background-color:"+shape.fill+";' class='ie-color'></span></div>";
   var shapeContainer = $('#ie-shapes-container').html();
   $('#ie-shapes-container').html(shapeContainer + shapeString);
   this.valid = false;
@@ -399,7 +399,8 @@ ImageTools.prototype.moveTrackerBox =  function(element,direction)
   }
   if (direction === 'up')
   {
-    console.log('figure out what to do inside direction === up');
+    sibling = element.previousSibling;
+    $(element).insertBefore(sibling);
   }
 }
 /**
@@ -466,6 +467,43 @@ ImageTools.prototype.shapeByLayer = function(layer)
 ImageTools.prototype.layerPriorityDown = function(e)
 {
   console.log('inside priorityDown func');
+  var shapeb4 = s.shapes;
+  var spec_shape_length = s.shapes.length - 1;
+  var target = e.target;
+  var parent = target.parentNode;
+  var shapeID = target.id;
+  var shapeID = shapeID.split('-');
+  var shapeID = shapeID[1];
+  var layer = bState.findLayer(shapeID);
+  console.log(layer);
+  var actualShape = bState.findShape(shapeID);
+  // Make sure layer isn't already at the top
+  if (layer === 0)
+  {
+    alert('you can\'t move it down, its at the bottom!');
+  }
+  console.log(layer);
+  var actualShape = bState.findShape(shapeID);
+  console.log(actualShape);
+  var newLayer = layer-1;
+  console.log(newLayer);
+  var changeShape = bState.shapeByLayer(newLayer);
+  actualShape.layer = newLayer;
+  changeShape.layer = layer;
+
+  // Move trackerbox to proper position
+  bState.moveTrackerBox(parent, 'up');
+
+
+
+  s.valid = false;
+  var testArray = s.shapes;
+  for (var i = 0; i < testArray.length; i++)
+  {
+
+  }
+  var sorted = testArray.sort(bState.compare);
+  console.log(sorted);
 }
 
 
