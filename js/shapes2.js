@@ -146,7 +146,7 @@ function CanvasState(canvas) {
 
 CanvasState.prototype.addShape = function(shape) {
   this.shapes.push(shape);
-  var shapeString = "<div class='ie-shape-desc' id='shape"+shape.id+"' data-shapeid='"+shape.id+"'>Shape ID:" + shape.id +"</div>";
+  var shapeString = "<div class='ie-shape-desc' id='shape"+shape.id+"' data-shapeid='"+shape.id+"'>Shape ID:" + shape.id +"<button class='ie-layer-up' id='shape-"+shape.id+"'>UP</button></div>";
   var shapeContainer = $('#ie-shapes-container').html();
   $('#ie-shapes-container').html(shapeContainer + shapeString);
   this.valid = false;
@@ -268,7 +268,7 @@ function ImageTools(canvas)
   this.button_selector_mode = $('#ie-selector-mode');
   this.button_selector_mode_off = $('#ie-select-mode-off'); 
   this.button_clear_selector = $('#ie-clear-selector');
-  $(this.button_new_layer).on('click', this.selectorMode);
+  $(this.button_new_layer).on('click', this.newLayer);
   $(this.button_remove_selected).on('click', this.removeSelected);
   $(this.button_selector_mode).on('click', this.selectorMode);
   $(this.button_clear_selector).on('click', function(){
@@ -370,7 +370,35 @@ ImageTools.prototype.drawSelector = function(selectorCanvasState)
     });
 
 }
-
+Array.prototype.move = function(from, to) {
+    this.splice(to, 0, this.splice(from, 1)[0]);
+};
+ImageTools.prototype.layerPriorityUp = function(e)
+{
+   console.log('before:');
+  var shapeb4 = s.shapes;
+  console.log(shapeb4);
+  var target = e.target;
+  var shapeID = target.id;
+  var shapeID = shapeID.split('-');
+  var shapeID = shapeID[1]; 
+  for (var i = 0; i < s.shapes.length; i++)
+  {
+    if (s.shapes[i].id === shapeID)
+    {
+      console.log('we have a winner');
+      
+      console.log("i:"+i);
+      //var brandNew = s.shapes[i]
+      var actualShape = s.shapes[i];
+      var newIndex = i+1;
+      s.shapes.move(i,newIndex);
+      console.log(s.shapes);   
+    }
+  }
+console.log('after: ');
+console.log(s.shapes);
+}
 /**
 * ImageTools.prototype.zIndex()
 * @param z-index
@@ -388,24 +416,42 @@ ImageTools.prototype.zIndex = function(element, param)
 * Creates a new layer using canvas state width and height (s)
 *
 */
-ImageTools.prototype.newLayer = function(canvasState)
+ImageTools.prototype.newLayer = function()
 {
-  var newShape = new Shape(0,0,s.width,s.height,'red');
-  canvasState.addShape(newShape);
+  var color = $('#ie-layer-color').val();
+  var newShape = new Shape(0,0,s.width,s.height,color);
+  s.addShape(newShape);
   console.log('in the new layer function!');
 }
 
 
+/**
+* ImageTools.prototype.createListener()
+* @param element
+* @param action
+* @param func
+*/
+ImageTools.prototype.createListener = function(element, action, func)
+{
+  $(element).on(action, func);
 
+}
 /**
 *
 * Uses CanvasState.prototype.removeShape (That I wrote on top) to remove the shape form the array of shapes that is drawn by the loop
 *
 */
-ImageTools.prototype.removeSelected = function(canvasState)
+ImageTools.prototype.removeSelected = function()
 {
-  var selected = canvasState.selection;
-  canvasState.removeShape(selected);
+  var selected = s.selection;
+  s.removeShape(selected);
 }
 
 var imagetools = new ImageTools(document.getElementById('canvas1'));
+var upButtons = document.getElementsByClassName('ie-layer-up');
+console.log(upButtons);
+var length = upButtons.length;
+for (var i=0; i < length; i++ )
+{
+  imagetools.createListener(upButtons[i],'click',imagetools.layerPriorityUp);
+}

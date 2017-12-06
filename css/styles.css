@@ -39,11 +39,10 @@ canvas
 }
 #ie-shapes-container
 {
-	width:500px;
-	height:200px;
+	width:200px;
 	border:1px solid blue;
 	position:fixed;
-	bottom:0;
+	top:10px;
 	right:20px;
 }
 #ie-tracker-selected
