@@ -23,6 +23,7 @@ function Shape(x, y, w, h, fill, canvas) {
   this.fill = fill || '#AAAAAA';
   this.id =  "id" + shape_counter;
   this.canvas_id = canvas;
+  this.layer = shape_counter;
   shape_counter++;
 }
 
@@ -249,8 +250,8 @@ init();
 
 function init() {
   s = new CanvasState(document.getElementById('canvas1'));
-  s.addShape(new Shape(40,40,50,50)); // The default is gray
-  s.addShape(new Shape(60,140,40,60, 'lightskyblue'));
+  s.addShape(new Shape(40,40,50,50, "#4286f4")); // The default is gray
+  s.addShape(new Shape(60,140,40,60, '#dcf442'));
    //Lets make some partially transparent
   s.addShape(new Shape(80,150,60,30, 'rgba(127, 255, 212, .5)'));
   s.addShape(new Shape(125,80,30,80, 'rgba(245, 222, 179, .7)'));
@@ -370,35 +371,64 @@ ImageTools.prototype.drawSelector = function(selectorCanvasState)
     });
 
 }
-Array.prototype.move = function(from, to) {
-    this.splice(to, 0, this.splice(from, 1)[0]);
-};
+ImageTools.prototype.arrayMove = function (arr, fromIndex, toIndex)
+{
+    var element = arr[fromIndex];
+    arr.splice(fromIndex, 1);
+    arr.splice(toIndex, 0, element);
+}
+
+ImageTools.prototype.compare =  function(a,b) 
+{
+  if (a.layer < b.layer)
+    return -1;
+  if (a.layer > b.layer)
+    return 1;
+  return 0;
+}
+
+
+
 ImageTools.prototype.layerPriorityUp = function(e)
 {
-   console.log('before:');
+
   var shapeb4 = s.shapes;
-  console.log(shapeb4);
+
   var target = e.target;
   var shapeID = target.id;
   var shapeID = shapeID.split('-');
-  var shapeID = shapeID[1]; 
+  var shapeID = shapeID[1];
+
+
   for (var i = 0; i < s.shapes.length; i++)
   {
     if (s.shapes[i].id === shapeID)
     {
-      console.log('we have a winner');
-      
-      console.log("i:"+i);
+      console.log('passed the id  test!!');
+      // test here to see if it's at the end of the array
+      var testLength = s.shapes.length;
+      var testIndex = i+1;
+      console.log("Shapes array  length"+testLength);
+      console.log("Test Index New:" + testIndex);
       //var brandNew = s.shapes[i]
       var actualShape = s.shapes[i];
       var newIndex = i+1;
-      s.shapes.move(i,newIndex);
-      console.log(s.shapes);   
+      var movedShape = s.shapes[i+1];
+      // need to change layer number here
+      s.shapes[i].layer = s.shapes[i].layer = i+1;;
+      s.shapes[i+1].layer = s.shapes[i++].layer - 1;
     }
   }
-console.log('after: ');
-console.log(s.shapes);
+  s.valid = false;
+  var testArray = s.shapes;
+  for (var i = 0; i < testArray.length; i++)
+  {
+
+  }
+  var sorted = testArray.sort(bState.compare);
+  console.log(sorted);
 }
+
 /**
 * ImageTools.prototype.zIndex()
 * @param z-index
@@ -449,9 +479,13 @@ ImageTools.prototype.removeSelected = function()
 
 var imagetools = new ImageTools(document.getElementById('canvas1'));
 var upButtons = document.getElementsByClassName('ie-layer-up');
-console.log(upButtons);
 var length = upButtons.length;
 for (var i=0; i < length; i++ )
 {
   imagetools.createListener(upButtons[i],'click',imagetools.layerPriorityUp);
+}
+console.log('logging all shapes one by one in for loop');
+for (var i = 0; i < s.shapes.length; i++)
+{
+  console.log(s.shapes[i]);
 }
