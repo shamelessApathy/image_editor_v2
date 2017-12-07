@@ -160,12 +160,15 @@ CanvasState.prototype.removeShape = function(shape)
   {
     return {}.toString.call(obj).split(' ')[1].slice(0, -1).toLowerCase();
   }
-  var l = (this.shapes.length);
+  var l = (this.shapes.length -1);
   for (var i = 0; i < l; i++ )
   {
+    console.log(this.shapes[i]);
     var id = this.shapes[i].id;
-    if (id === shape.id)
+    if ((id === shape.id))
     {
+      // Send the layer that''s being removed to the sortLayers() function;
+      this.sortLayers(this.shapes[i].layer);
       var index = i;
       console.log(this.shapes);
       this.shapes.splice(i,1);
@@ -173,12 +176,25 @@ CanvasState.prototype.removeShape = function(shape)
       var shapeIdString = "#shape"+shape.id;
       var shapes_container = $('#ie-shapes-container');
       $('#ie-tracker-selected').appendTo(shapes_container);
+      
+      
       $(shapeIdString).remove();
+      // A shape has been removed, therefore, the counter must be set back 1
+      shape_counter = shape_counter -1;
       this.valid = false;
     }
   }
 }
-
+CanvasState.prototype.sortLayers = function(layer)
+{
+  for (var i =0; i < s.shapes.length; i++)
+  {
+    if (s.shapes[i].layer > layer)
+    {
+      s.shapes[i].layer = s.shapes[i].layer -1;
+    }
+  }
+}
 CanvasState.prototype.clear = function() {
   this.ctx.clearRect(0, 0, this.width, this.height);
 }
@@ -270,7 +286,13 @@ function ImageTools(canvas)
   this.button_selector_mode = $('#ie-selector-mode');
   this.button_selector_mode_off = $('#ie-select-mode-off'); 
   this.button_clear_selector = $('#ie-clear-selector');
+  this.button_start_resize = $('#ie-start-resize');
+  this.button_resize = $('#ie-button-resize');
   $(this.button_new_layer).on('click', this.newLayer);
+  $(this.button_start_resize).on('click', function(){
+    $('#ie-resize-spec-form').show();
+  });
+  $(this.button_resize).on('click', this.resizeCanvas);
   $(this.button_remove_selected).on('click', this.removeSelected);
   $(this.button_selector_mode).on('click', this.selectorMode);
   $(this.button_clear_selector).on('click', function(){
@@ -420,7 +442,34 @@ ImageTools.prototype.findLayer = function(shapeID)
     }
   }
 }
-
+/**
+* ImageTools.prototype.resizeCanvas()
+* Resizes canvas while also saving the shapes from being deleted
+* @canvas
+* @shapes
+*/
+ImageTools.prototype.resizeCanvas = function()
+{
+  var shapes = s.shapes;
+  var canvas = document.getElementById('canvas1');
+  var selectorCanvas = document.getElementById('selector-canvas');
+  console.log('inside resizeCanvas() function');
+  var width = $('#ie-resize-width').val();
+  var height = $('#ie-resize-height').val();
+  if (!width || !height)
+  {
+    alert('you need both widht and height');
+  }
+  else
+  {
+    canvas.height = height;
+    canvas.width = width;
+    selectorCanvas.height = height;
+    selectorCanvas.width = width;
+    s.shapes = shapes;
+    s.valid = false;
+  }
+}
 ImageTools.prototype.findShape = function(shapeID)
 {
   for (var i = 0; i < s.shapes.length; i++)
@@ -441,7 +490,7 @@ ImageTools.prototype.changeLayer = function(shape, direction)
   }
 
 }
-
+ 
 
 ImageTools.prototype.shapeByLayer = function(layer)
 {
