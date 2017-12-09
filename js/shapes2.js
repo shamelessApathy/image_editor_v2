@@ -503,16 +503,7 @@ ImageTools.prototype.handleImage = function(e)
       var newImgShape = new Shape(0,0,i_obj.width,i_obj.height,dataArray,canvas);
       console.log(newImgShape);
       s.addShape(newImgShape);
-      /*i.onload = function() 
-      {
-        // In ImageTools we should not be resizing the canvas to the image, without necessary user dialogue interaction
-          //canvas.width = i.width;
-          //canvas.height = i.height;
-          // Add the shape to the shapes array, only the 'fill' equals the image?
-          /*var newImgShape = new Shape(0,0,i.width,i.height,i,canvas);
-          s.addShape(newImgShape);
-          s.valid = false;*/
-          //context.drawImage(i,0,0);
+     $('#ie-file-input').hide();
 
       }
 
