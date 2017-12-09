@@ -19,7 +19,7 @@ canvas
 	top:700px;
 	left:20px;
 	height:100px;
-	width:800px;
+	width:100%;
 	border:solid 2px red;
 }
 #ie-resize-spec-form
@@ -65,4 +65,8 @@ canvas
 {
 	z-index:-1;
 	/* higher z-index so as not to interact with the lower canvas1 element?? */
+}
+#ie-file-input
+{
+	display:none;
 }

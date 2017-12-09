@@ -217,6 +217,10 @@ CanvasState.prototype.draw = function() {
       // We can skip the drawing of elements that have moved off the screen:
       if (shape.x > this.width || shape.y > this.height ||
           shape.x + shape.w < 0 || shape.y + shape.h < 0) continue;
+
+        console.log('matched a shape with the contains');
+        console.log(shapes[i]);
+      
       shapes[i].draw(ctx);
     }
     
@@ -281,6 +285,7 @@ function ImageTools(canvas)
   // Original Canvas State
   this.canvasState = s;
   this.selectorCanvas = document.getElementById('selector-canvas');
+  this.file_input = document.getElementById('ie-file-input');
   this.button_new_layer = $('#ie-new-layer');
   this.button_remove_selected = $('#ie-remove-shape');
   this.button_selector_mode = $('#ie-selector-mode');
@@ -288,6 +293,11 @@ function ImageTools(canvas)
   this.button_clear_selector = $('#ie-clear-selector');
   this.button_start_resize = $('#ie-start-resize');
   this.button_resize = $('#ie-button-resize');
+  this.button_upload_unhide = $('#ie-upload');
+  $('#ie-image').change(this.handleImage);
+  $(this.button_upload_unhide).on('click', function(){
+    $(this.file_input).css({"display":"block"});
+  }.bind(this))
   $(this.button_new_layer).on('click', this.newLayer);
   $(this.button_start_resize).on('click', function(){
     $('#ie-resize-spec-form').show();
@@ -300,7 +310,14 @@ function ImageTools(canvas)
   }.bind(this));
   bState = this;
 }
+ImageTools.prototype.getPixels = function(image)
+{
 
+    var c = document.getElementById('canvas1');
+    var ctx = c.getContext('2d');
+        ctx.drawImage(img,0,0);
+        return ctx.getImageData(0,0,c.width,c.height);
+}
 /**
 * ImageTools.prototype.clear(canvas)
 * clears the given canvas
@@ -441,6 +458,58 @@ ImageTools.prototype.findLayer = function(shapeID)
       return s.shapes[i].layer;
     }
   }
+}
+
+
+/**
+*
+*
+*
+*/
+
+ImageTools.prototype.handleImage = function(e)
+{
+      // This function mounts image onto HMTL5 Canvas
+
+        var reader = new FileReader();
+        reader.onload = function(event)
+        {
+            //var img = new Image();
+            //var current_img_height =  0;
+            function objectifyImage(i) 
+        {
+            var img_obj = new Image();
+            img_obj.src = i;
+            orig_image = img_obj;
+            return img_obj;
+        }  
+
+      var canvas = document.getElementById('canvas1');
+      var context = canvas.getContext('2d');
+      i = event.target.result;
+      i_obj = objectifyImage(i);
+      console.log(i);
+      var dataArray = {"image": i};
+      var newImgShape = new Shape(0,0,i_obj.width,i_obj.height,dataArray,canvas);
+      console.log(newImgShape);
+      s.addShape(newImgShape);
+      /*i.onload = function() 
+      {
+        // In ImageTools we should not be resizing the canvas to the image, without necessary user dialogue interaction
+          //canvas.width = i.width;
+          //canvas.height = i.height;
+          // Add the shape to the shapes array, only the 'fill' equals the image?
+          /*var newImgShape = new Shape(0,0,i.width,i.height,i,canvas);
+          s.addShape(newImgShape);
+          s.valid = false;*/
+          //context.drawImage(i,0,0);
+
+      }
+
+            
+        
+        
+  reader.readAsDataURL(e.target.files[0]);
 }
 /**
 * ImageTools.prototype.resizeCanvas()
