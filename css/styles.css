@@ -16,11 +16,20 @@ canvas
 #ie-controls-container
 {
 	position:fixed;
-	top:700px;
+	bottom:10px;
 	left:20px;
 	height:100px;
 	width:100%;
-	border:solid 2px red;
+	border:solid 2px black;
+	z-index:10;
+}
+#ie-file-input
+{
+	position:absolute;
+	bottom:150px; 
+	left:50px;
+	background-color:#ccc;
+	display:none;
 }
 #ie-resize-spec-form
 {
@@ -65,8 +74,4 @@ canvas
 {
 	z-index:-1;
 	/* higher z-index so as not to interact with the lower canvas1 element?? */
-}
-#ie-file-input
-{
-	display:none;
 }
