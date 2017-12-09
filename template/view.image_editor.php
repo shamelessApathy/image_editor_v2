@@ -42,6 +42,9 @@
 	<div class='ie-control'>
 		<button title='Upload' class='ie-icon' id='ie-upload'>Upload</button>
 	</div>
+	<div class='ie-control'>
+		<button title='Add  Text' class='ie-icon' id='ie-add-text'>Add Text</button>
+	</div>
 </div> 
 
 

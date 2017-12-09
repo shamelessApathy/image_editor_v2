@@ -296,6 +296,7 @@ function ImageTools(canvas)
   this.canvasState = s;
   this.selectorCanvas = document.getElementById('selector-canvas');
   this.file_input = document.getElementById('ie-file-input');
+  this.button_add_text = document.getElementById('ie-add-text');
   this.button_new_layer = $('#ie-new-layer');
   this.button_remove_selected = $('#ie-remove-shape');
   this.button_selector_mode = $('#ie-selector-mode');
@@ -304,6 +305,7 @@ function ImageTools(canvas)
   this.button_start_resize = $('#ie-start-resize');
   this.button_resize = $('#ie-button-resize');
   this.button_upload_unhide = $('#ie-upload');
+  $(this.button_add_text).on('click', this.addText);
   $('#ie-image').change(this.handleImage);
   $(this.button_upload_unhide).on('click', function(){
     $(this.file_input).css({"display":"block"});
@@ -320,6 +322,33 @@ function ImageTools(canvas)
   }.bind(this));
   bState = this;
 }
+
+
+/**
+* ImageTools.prototype.addText 
+* Creates a new layer with text in it
+*
+*/
+ImageTools.prototype.addText = function()
+{
+  console.log('inside addText() function');
+  var c=document.getElementById("canvas1");
+var ctx=c.getContext("2d");
+
+ctx.font="20px Georgia";
+ctx.fillText("Hello World!",10,50);
+
+ctx.font="30px Verdana";
+// Create gradient
+var gradient=ctx.createLinearGradient(0,0,c.width,0);
+gradient.addColorStop("0","magenta");
+gradient.addColorStop("0.5","blue");
+gradient.addColorStop("1.0","red");
+// Fill with gradient
+ctx.fillStyle=gradient;
+ctx.fillText("Big smile!",10,90);
+}
+
 ImageTools.prototype.getPixels = function(image)
 {
 
