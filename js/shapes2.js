@@ -466,6 +466,7 @@ ImageTools.prototype.resizeCanvas = function()
     canvas.width = width;
     selectorCanvas.height = height;
     selectorCanvas.width = width;
+    s = new CanvasState(canvas);
     s.shapes = shapes;
     s.valid = false;
   }

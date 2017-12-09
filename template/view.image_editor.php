@@ -17,7 +17,7 @@
 			<label>Height:</label>
 			<input name='height' id='ie-resize-height' placeholder='height' type='number'/><br>
 			<label>Width:</label>
-			<input name='width' placeholder='height' id='ie-resize-width' type='number'/><br>
+			<input name='width' placeholder='width' id='ie-resize-width' type='number'/><br>
 			<button type='button' id='ie-button-resize'>Resize Canvas</button>
 		</div>
 	</div>
