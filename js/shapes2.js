@@ -217,11 +217,23 @@ CanvasState.prototype.draw = function() {
       // We can skip the drawing of elements that have moved off the screen:
       if (shape.x > this.width || shape.y > this.height ||
           shape.x + shape.w < 0 || shape.y + shape.h < 0) continue;
-
-        console.log('matched a shape with the contains');
-        console.log(shapes[i]);
-      
-      shapes[i].draw(ctx);
+        var typeOf = shapes[i].fill instanceof Object;
+       if (typeOf)
+      {
+        //draw image
+        var x = shapes[i].x;
+        var y = shapes[i].y;
+        var image_src = shapes[i].fill['image'];
+        var image = new Image;
+        image.src = image_src;
+        shapes[i].w = image.width;
+        shapes[i].h = image.height;
+          ctx.drawImage(image,x,y);
+      }
+      else
+      {
+        shapes[i].draw(ctx);
+      }
     }
     
     // draw selection
