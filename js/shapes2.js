@@ -156,17 +156,15 @@ CanvasState.prototype.addShape = function(shape) {
 
 CanvasState.prototype.removeShape = function(shape)
 {
-  function typeOf(obj) 
-  {
-    return {}.toString.call(obj).split(' ')[1].slice(0, -1).toLowerCase();
-  }
-  var l = (this.shapes.length -1);
+  console.log(shape);
+  var l = this.shapes.length;
   for (var i = 0; i < l; i++ )
   {
     console.log(this.shapes[i]);
     var id = this.shapes[i].id;
     if ((id === shape.id))
     {
+      console.log('passed the ID test for removeShape funciton');
       // Send the layer that''s being removed to the sortLayers() function;
       this.sortLayers(this.shapes[i].layer);
       var index = i;
@@ -505,16 +503,7 @@ ImageTools.prototype.handleImage = function(e)
       var newImgShape = new Shape(0,0,i_obj.width,i_obj.height,dataArray,canvas);
       console.log(newImgShape);
       s.addShape(newImgShape);
-      /*i.onload = function() 
-      {
-        // In ImageTools we should not be resizing the canvas to the image, without necessary user dialogue interaction
-          //canvas.width = i.width;
-          //canvas.height = i.height;
-          // Add the shape to the shapes array, only the 'fill' equals the image?
-          /*var newImgShape = new Shape(0,0,i.width,i.height,i,canvas);
-          s.addShape(newImgShape);
-          s.valid = false;*/
-          //context.drawImage(i,0,0);
+     $('#ie-file-input').hide();
 
       }
 
@@ -755,7 +744,26 @@ ImageTools.prototype.createListener = function(element, action, func)
 ImageTools.prototype.removeSelected = function()
 {
   var selected = s.selection;
-  s.removeShape(selected);
+  var typeOf = selected.fill instanceof Object;
+  if (typeOf)
+  {
+    // We need to recreate the whole canvas to remove an image, it's not as simple as the shapes
+    // Also made sure to save the s.shapes array as a var so I can put them back on the cleared canvas
+    console.log('we have got a match in typeOf removeSelected()');
+    s.removeShape(selected);
+    //s.clear();
+    var canvas = document.getElementById('canvas1');
+    var shapes = s.shapes;
+    console.log(shapes);
+    /*s = new CanvasState(canvas);
+    
+    //s.shapes = shapes;
+    s.valid = false;*/
+  }
+  else
+  {
+    s.removeShape(selected);
+  }
 }
 
 var imagetools = new ImageTools(document.getElementById('canvas1'));

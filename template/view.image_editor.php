@@ -9,7 +9,11 @@
 
 
 
-
+<div id='ie-file-input'>
+		<span class='ie-close'><button>X</button></span>
+		<h4>Choose your image to edit</h4>
+		<input type='file' id='ie-image' name='ie-image'/>
+		</div>
 <div id='ie-controls-container'>
 	<div class='ie-control' id='ie-resize'>
 		<button id='ie-start-resize'>Resize</button>
@@ -36,11 +40,6 @@
 		<input type='number' id='ie-layer-height' placeholder='height'/>
 	</div>
 	<div class='ie-control'>
-		<div id='ie-file-input'>
-		<span id='ie-close'><button>X</button></span>
-		<h4>Choose your image to edit</h4>
-		<input type='file' id='ie-image' name='ie-image'/>
-		</div>
 		<button title='Upload' class='ie-icon' id='ie-upload'>Upload</button>
 	</div>
 </div> 
