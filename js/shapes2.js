@@ -148,7 +148,7 @@ function CanvasState(canvas) {
 
 CanvasState.prototype.addShape = function(shape) {
   this.shapes.push(shape);
-  var shapeString = "<div class='ie-shape-desc' id='shape"+shape.id+"' data-shapeid='"+shape.id+"'>Shape ID:" + shape.id +"<button class='ie-layer-up' id='shape-"+shape.id+"'>UP</button><button id='shape-"+shape.id+"' class='ie-layer-down'>DOWN</button><span style='display:block; width:100%; height:20px; background-color:"+shape.fill+";' class='ie-color'></span></div>";
+  var shapeString = "<div class='ie-shape-desc' id='shape"+shape.id+"' data-shapeid='"+shape.id+"'>Shape ID:" + shape.id +"<button onclick='outsideLayerUp(this)'class='ie-layer-up' id='shape-"+shape.id+"'>UP</button><button onclick='outsideLayerDown(this)' id='shape-"+shape.id+"' class='ie-layer-down'>DOWN</button><span style='display:block; width:100%; height:20px; background-color:"+shape.fill+";' class='ie-color'></span></div>";
   var shapeContainer = $('#ie-shapes-container').html();
   $('#ie-shapes-container').html(shapeContainer + shapeString);
   this.valid = false;
@@ -584,12 +584,12 @@ ImageTools.prototype.shapeByLayer = function(layer)
 *
 */
 
-ImageTools.prototype.layerPriorityDown = function(e)
+ImageTools.prototype.layerPriorityDown = function(element)
 {
   console.log('inside priorityDown func');
   var shapeb4 = s.shapes;
   var spec_shape_length = s.shapes.length - 1;
-  var target = e.target;
+  var target = element;
   var parent = target.parentNode;
   var shapeID = target.id;
   var shapeID = shapeID.split('-');
@@ -632,12 +632,12 @@ ImageTools.prototype.layerPriorityDown = function(e)
 * Changes how draw array is sorted, changes layer value in shape objects
 *
 */
-ImageTools.prototype.layerPriorityUp = function(e)
+ImageTools.prototype.layerPriorityUp = function(element)
 {
 
   var shapeb4 = s.shapes;
   var spec_shape_length = s.shapes.length - 1;
-  var target = e.target;
+  var target = element;
   var parent = target.parentNode;
   var shapeID = target.id;
   var shapeID = shapeID.split('-');
@@ -771,15 +771,28 @@ var upButtons = document.getElementsByClassName('ie-layer-up');
 var length = upButtons.length;
 for (var i=0; i < length; i++ )
 {
-  imagetools.createListener(upButtons[i],'click',imagetools.layerPriorityUp);
+  //imagetools.createListener(upButtons[i],'click',imagetools.layerPriorityUp);
 }
 
 
 var downButtons = document.getElementsByClassName('ie-layer-down');
 for (var i= 0; i < downButtons.length; i++)
 {
-  imagetools.createListener(downButtons[i], 'click', imagetools.layerPriorityDown);
+  //imagetools.createListener(downButtons[i], 'click', imagetools.layerPriorityDown);
 }
-
+var outsideLayerUp = function(element)
+{
+  var element = element;
+  console.log('got to the outsidelayerup function!');
+  console.log(element);
+  imagetools.layerPriorityUp(element);
+}
+var outsideLayerDown = function(element)
+{
+  var element = element;
+  console.log('got to the outsidelayerup function!');
+  console.log(element);
+  imagetools.layerPriorityDown(element);
+}
 console.log(s.shapes);
 
