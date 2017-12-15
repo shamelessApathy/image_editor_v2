@@ -241,6 +241,14 @@ CanvasState.prototype.draw = function() {
       ctx.lineWidth = this.selectionWidth;
       var mySel = this.selection;
       ctx.strokeRect(mySel.x,mySel.y,mySel.w,mySel.h);
+      var right = mySel.w + mySel.x -10;
+      var bottom = mySel.h + mySel.y -10;
+      console.log("RIGHT:" + right);
+      console.log("BOTTOM:" + bottom);
+      ctx.strokeStyle = "#333333";
+      ctx.lineWidth = 1;
+      ctx.strokeRect(right,bottom,10,10);
+
     }
     
     // ** Add stuff you want drawn on top all the time here **
@@ -304,6 +312,8 @@ function ImageTools(canvas)
   this.button_start_resize = $('#ie-start-resize');
   this.button_resize = $('#ie-button-resize');
   this.button_upload_unhide = $('#ie-upload');
+  this.button_add_text = $('#ie-text');
+  $(this.button_add_text).on('click', this.addText);
   $('#ie-image').change(this.handleImage);
   $(this.button_upload_unhide).on('click', function(){
     $(this.file_input).css({"display":"block"});
@@ -338,6 +348,24 @@ ImageTools.prototype.clear = function(canvas)
   var ctx = canvas.getContext('2d');
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
+
+
+/**
+* ImageTools.prototype.addText
+* Starts the process of creating a text element, making it into a shape, and then getting it drawn onto the canvas
+*
+*
+*/
+
+ImageTools.prototype.addText = function()
+{
+  var text = $('#ie-text-value').val();
+  var color = $('#ie-text-color-value').val();
+
+  console.log('TEXT: ' + text);
+  console.log('COLOR: ' + color);
+}
+
 /**
 *
 * ImageTools.prototype.selectMode() 
@@ -367,7 +395,7 @@ ImageTools.prototype.selectorMode = function()
 
 ImageTools.prototype.selectorModeOff = function()
 {
-
+     // Selector mode is currently strange, not messing with it for awhile
 }
 
 /**

@@ -42,6 +42,13 @@
 	<div class='ie-control'>
 		<button title='Upload' class='ie-icon' id='ie-upload'>Upload</button>
 	</div>
+	<div class='ie-control'>
+		<button title='Add Text' class='ie-icon' id='ie-text'>Add Text</button><br>
+		<label>Text</label><br>
+		<input type='text' id='ie-text-value' placeholder='text you want'/>
+		<label>Color</label><br>
+		<input type='text' id='ie-text-color-value' placeholder='#hexcode'/>
+	</div>
 </div> 
 
 
