@@ -96,6 +96,32 @@ function CanvasState(canvas) {
       var selected_div = document.getElementById('ie-tracker-selected');
       if (shapes[i].contains(mx, my)) {
         var mySel = shapes[i];
+        // Here we willl attempt to define the area thatis thew draggable box
+        var drag_x_begin = mySel.x;
+        var drag_x_end = mySel.x + mySel.w;
+        var drag_y_begin = mySel.y;
+        var drag_y_end = mySel.y + mySel.h;
+        var leftBorder = drag_x_end -20;
+        var rightBorder = drag_x_end;
+
+        var topBorder = drag_y_end -20;
+        var bottomBorder = drag_y_end;
+
+
+        console.log("MX: " + mx);
+        console.log("MY: " + my);
+        console.log('Left Border: ' + leftBorder);
+        console.log("Right Border: " + rightBorder);
+        console.log('Top Border: ' + topBorder);
+        console.log('Bottom Border: ' + bottomBorder);
+        // test to see if the click landed inside dragbox
+        if (mx >= leftBorder && mx <= rightBorder)
+        {
+          if (my <= topBorder && my >= bottomBorder)
+          {
+            console.log('inside of drag boooxxxx');
+          }
+        }
         // Keep track of where in the object we clicked
         // so we can move it smoothly (see mousemove)
         myState.dragoffx = mx - mySel.x;
