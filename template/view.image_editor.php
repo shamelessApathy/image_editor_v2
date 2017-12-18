@@ -2,10 +2,10 @@
 <h1> You are in the image editor template</h1>
 
 
-<canvas id="canvas1" width="400" height="300">
+<canvas id="canvas1" width="600" height="400">
     This text is displayed if your browser does not support HTML5 Canvas.
    </canvas>
-   <canvas id='selector-canvas' width="400" height="300"></canvas>
+   <canvas id='selector-canvas' width="600" height="400"></canvas>
 
 
 

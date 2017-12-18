@@ -7,9 +7,19 @@
 // Free to use and distribute at will
 // So long as you are nice to people, etc
 
+
+// Global MouseDown Events
+
 // Constructor for Shape objects to hold data for all drawn objects.
 // For now they will just be defined as rectangles.
 var s;
+var mouse_down = 0;
+document.addEventListener('mousedown', function(){
+  mouse_down++;
+});
+document.addEventListener('mouseup', function(){
+  mouse_down--;
+})
 var selector_canvas;
 var shape_counter = 0;
 function Shape(x, y, w, h, fill, canvas) {
@@ -115,12 +125,15 @@ function CanvasState(canvas) {
         console.log('Top Border: ' + topBorder);
         console.log('Bottom Border: ' + bottomBorder);
         // test to see if the click landed inside dragbox
-        if (mx >= leftBorder && mx <= rightBorder)
+        if (mx > leftBorder && mx < rightBorder)
         {
-          if (my <= topBorder && my >= bottomBorder)
-          {
-            console.log('inside of drag boooxxxx');
-          }
+            if ( my > topBorder && my < bottomBorder)
+            {
+              console.log('inside of drag boooxxxx');
+              bState.resizeElement(shapes[i], myState, leftBorder, rightBorder, topBorder, bottomBorder);
+              return;
+            }
+
         }
         // Keep track of where in the object we clicked
         // so we can move it smoothly (see mousemove)
@@ -158,11 +171,7 @@ function CanvasState(canvas) {
   canvas.addEventListener('mouseup', function(e) {
     myState.dragging = false;
   }, true);
-  // double click for making new shapes
-  canvas.addEventListener('dblclick', function(e) {
-    var mouse = myState.getMouse(e);
-    myState.addShape(new Shape(mouse.x - 10, mouse.y - 10, 20, 20, 'rgba(0,255,0,.6)'));
-  }, true);
+
   
   // **** Options! ****
   
@@ -374,7 +383,56 @@ ImageTools.prototype.clear = function(canvas)
   var ctx = canvas.getContext('2d');
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 }
+/**
+* ImageTools.prototype.resizeElement
+* @param shape
+* @param mx,my
+*
+*
+*/
+ImageTools.prototype.resizeElement = function(shape, canvasState, leftBorder, rightBorder, topBorder, bottomBorder)
+{
+  var width = shape.w;
+  var height = shape.h;
+  console.log("Inside ImageTools.prototype.resizeElement function");
+  $('#canvas1').on('mousedown', function(e){
+    var mouse = canvasState.getMouse(e);
+    if (mouse.x > leftBorder && mouse.x < rightBorder && mouse.y > topBorder && mouse.y < bottomBorder)
+    {
+      console.log('sofar');
+      console.log('mouse_down: ' + mouse_down);
+      $('#canvas1').on('mousemove', function(e){
+        if (mouse_down)
+        {
+          var mouseMove = canvasState.getMouse(e);
+          console.log(mouseMove);
+          var mouseX = mouseMove.x;
+          var mouseY = mouseMove.y;
+          // Set new heights and widths for shape, then set valid to false to get CanvasState to redraw shape, this is in the loop
+            if (mouseX < rightBorder)
+            {
+              shape.w--;
+            }
+            if (mouseY < bottomBorder)
+            {
+              shape.h--;
+            }
+            if (mouseX > rightBorder)
+            {
+              shape.w++;
+            }
+            if (mouseY > bottomBorder)
+            {
+              shape.h++;
+            }
+            canvasState.valid =false;
+        }
+      });
 
+    }
+    }.bind(this))
+
+}
 
 /**
 * ImageTools.prototype.addText
