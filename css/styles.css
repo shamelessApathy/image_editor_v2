@@ -75,3 +75,12 @@ canvas
 	z-index:-1;
 	/* higher z-index so as not to interact with the lower canvas1 element?? */
 }
+#ie-text-input
+{
+	position:absolute;
+	bottom:120px;
+	left:100px;
+	background-color:#ccc;
+	padding:5px;
+	display:none;
+}

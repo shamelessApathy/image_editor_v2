@@ -22,6 +22,10 @@ function Shape(x, y, w, h, fill, canvas) {
   this.h = h || 1;
   this.fill = fill || '#AAAAAA';
   this.id =  "id" + shape_counter;
+  this.right = this.x + this.w;
+  this.left = this.x;
+  this.top = this.y;
+  this.bottom = this.y + this.h;
   this.canvas_id = canvas;
   this.layer = shape_counter;
   shape_counter++;
@@ -216,7 +220,7 @@ CanvasState.prototype.draw = function() {
       if (shape.x > this.width || shape.y > this.height ||
           shape.x + shape.w < 0 || shape.y + shape.h < 0) continue;
         var typeOf = shapes[i].fill instanceof Object;
-       if (typeOf)
+       if (typeOf && shapes[i].fill['image'])
       {
         //draw image
         var x = shapes[i].x;
@@ -227,6 +231,13 @@ CanvasState.prototype.draw = function() {
         shapes[i].w = image.width;
         shapes[i].h = image.height;
           ctx.drawImage(image,x,y);
+      }
+      if (typeOf && shapes[i].fill['text'])
+      {
+        ctx.font ="20px Arial";
+        ctx.fillStyle = 'red';
+        ctx.fillText("Shit",0,0);
+        console.log('got a match for text');
       }
       else
       {
@@ -296,6 +307,7 @@ function ImageTools(canvas)
   this.canvasState = s;
   this.selectorCanvas = document.getElementById('selector-canvas');
   this.file_input = document.getElementById('ie-file-input');
+  this.text_input = document.getElementById('ie-text-input');
   this.button_new_layer = $('#ie-new-layer');
   this.button_remove_selected = $('#ie-remove-shape');
   this.button_selector_mode = $('#ie-selector-mode');
@@ -304,6 +316,10 @@ function ImageTools(canvas)
   this.button_start_resize = $('#ie-start-resize');
   this.button_resize = $('#ie-button-resize');
   this.button_upload_unhide = $('#ie-upload');
+  this.button_text = $('#ie-text');
+  this.button_add_text = $('#ie-add-text');
+
+  // Listeners
   $('#ie-image').change(this.handleImage);
   $(this.button_upload_unhide).on('click', function(){
     $(this.file_input).css({"display":"block"});
@@ -318,6 +334,13 @@ function ImageTools(canvas)
   $(this.button_clear_selector).on('click', function(){
     this.clear(this.selectorCanvas);
   }.bind(this));
+  $(this.button_text).on('click', function(){
+    $(this.text_input).show();
+  }.bind(this))
+  $(this.button_add_text).on('click', function(){
+    this.addText(this.canvasState, this.canvas);
+  }.bind(this));
+
   bState = this;
 }
 ImageTools.prototype.getPixels = function(image)
@@ -327,6 +350,40 @@ ImageTools.prototype.getPixels = function(image)
     var ctx = c.getContext('2d');
         ctx.drawImage(img,0,0);
         return ctx.getImageData(0,0,c.width,c.height);
+}
+
+/**
+* ImageTools.prototype.addText 
+* Will first create a shape with dimensions, then fill the shape with the text, hopefully
+*
+*
+*/
+
+ImageTools.prototype.addText = function(canvasState, canvas)
+{
+  var text = $('#ie-text-value').val();
+  var color = $('#ie-text-color-value').val();
+  var fontSize = $('#ie-text-font-size').val();
+  var height = $('#ie-text-height').val();
+  var width = $('#ie-text-width').val();
+  console.log('TEXT VALUE: ' + text);
+  console.log('COLOR VALUE: ' + color);
+  console.log('FONTSIZE VALUE: ' + fontSize);
+  console.log('HEIGHT VALUE: ' + height);
+  console.log('WIDTH VALUE: ' + width);
+  var fill = {"text":text};
+  // Create new shape for the text here
+  newShape = new Shape(0,0, width, height, fill, canvas);
+  newShape.fontSize = fontSize;
+  newShape.textColor = color; 
+  // add shape to shapes array
+  console.log(s);
+  canvasState.addShape(newShape);
+  ctx = canvas.getContext('2d');
+  ctx.font = "20px Arial";
+  ctx.fillStyle = 'red';
+  ctx.fillText('HERE',40,100);
+  console.log('this is new');
 }
 /**
 * ImageTools.prototype.clear(canvas)

@@ -8,7 +8,19 @@
    <canvas id='selector-canvas' width="400" height="300"></canvas>
 
 
-
+<div id='ie-text-input'>
+	<label>Text</label><br>
+	<input type='text' id='ie-text-value' placeholder='text you want here'/><br>
+	<label>Color</label><br>
+	<input type='text' id='ie-text-color-value' placeholder='#333333'/><br>
+	<label>Font Size</label><br>
+	<input type='number' id='ie-text-font-size' placeholder='10'/><br>
+	<label>Height</label><br>
+	<input type='number' id='ie-text-height' placeholder='50'/><br>
+	<label>Width</label><br>
+	<input type='number' id='ie-text-width' placeholder='100'/><br>
+	<button type='button' id='ie-add-text'>Add Text</button>
+</div>
 <div id='ie-file-input'>
 		<span class='ie-close'><button>X</button></span>
 		<h4>Choose your image to edit</h4>
@@ -41,6 +53,9 @@
 	</div>
 	<div class='ie-control'>
 		<button title='Upload' class='ie-icon' id='ie-upload'>Upload</button>
+	</div>
+	<div class='ie-control'>
+		<button title='Add Text' class='ie-icon' id='ie-text'>Add Text</button>
 	</div>
 </div> 
 
