@@ -234,10 +234,20 @@ CanvasState.prototype.draw = function() {
       }
       if (typeOf && shapes[i].fill['text'])
       {
-        ctx.font ="20px Arial";
+       /* ctx.font ="20px Arial";
         ctx.fillStyle = 'red';
         ctx.fillText("Shit",0,0);
-        console.log('got a match for text');
+        console.log('got a match for text');*/
+        var drawing = document.getElementById("canvas1");
+        var con = drawing.getContext("2d");
+        //clear background
+        con.fillStyle = "white";
+        con.fillRect(0,0, 200, 200);
+        // draw font in red
+        con.fillStyle = "red";
+        con.font = "20pt sans-serif";
+        con.fillText("Canvas Rocks!", 5, 100);
+        con.strokeText("Canvas Rocks!", 5, 130);
       }
       else
       {
@@ -379,10 +389,7 @@ ImageTools.prototype.addText = function(canvasState, canvas)
   // add shape to shapes array
   console.log(s);
   canvasState.addShape(newShape);
-  ctx = canvas.getContext('2d');
-  ctx.font = "20px Arial";
-  ctx.fillStyle = 'red';
-  ctx.fillText('HERE',40,100);
+ 
   console.log('this is new');
 }
 /**
