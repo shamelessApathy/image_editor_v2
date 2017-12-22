@@ -43,6 +43,44 @@ Shape.prototype.draw = function(ctx) {
     this.w = image.width;
     ctx.drawImage(image,this.x,this.y);
   }
+  if (this.type === 'text')
+  {
+    var text_string = this.fill['text'];
+    console.log('matched text')
+    console.log(this);
+    var font_string = this.fontSize+"px Arial";
+    
+    var Paint = {
+        RECTANGLE_STROKE_STYLE : 'black',
+        RECTANGLE_LINE_WIDTH : 1,
+        VALUE_FONT : font_string,
+        VALUE_FILL_STYLE : this.textColor
+    }
+    canvas = document.getElementById('canvas1');
+    // Obtains the context 2d of the canvas 
+    // It may return null
+    var ctx2d = canvas.getContext('2d');
+    
+    if (ctx2d) {
+        // draw rectangular
+        ctx2d.strokeStyle=Paint.RECTANGLE_STROKE_STYLE;
+        ctx2d.lineWidth = Paint.RECTANGLE_LINE_WIDTH;
+        ctx2d.strokeRect(this.x, this.y, this.w, this.h);
+        
+        // draw text (this.val)
+        ctx2d.textBaseline = "middle";
+        ctx2d.font = Paint.VALUE_FONT;
+        ctx2d.fillStyle = Paint.VALUE_FILL_STYLE;
+        // ctx2d.measureText(text).width/2 
+        // returns the text width (given the supplied font) / 2
+        textX = this.x+this.w/2-ctx2d.measureText(text_string).width/2;
+        textY = this.y+this.h/2;
+        ctx2d.fillText(text_string, this.x+10, this.y+10);
+    } else {
+        // Do something meaningful
+    }
+
+  }
   else
   {
     ctx.fillStyle = this.fill;
@@ -235,7 +273,7 @@ CanvasState.prototype.draw = function() {
           shape.x + shape.w < 0 || shape.y + shape.h < 0) continue;
 
 
-
+        shapes[i].draw(ctx);
     // draw selection
     // right now this is just a stroke along the edge of the selected Shape
     if (this.selection != null) {
@@ -245,6 +283,7 @@ CanvasState.prototype.draw = function() {
       ctx.strokeRect(mySel.x,mySel.y,mySel.w,mySel.h);
     }
   }
+}
     
     // ** Add stuff you want drawn on top all the time here **
     
@@ -368,14 +407,10 @@ ImageTools.prototype.addText = function(canvasState, canvas)
   newShape = new Shape(0,0, width, height, fill, canvas);
   newShape.fontSize = fontSize;
   newShape.textColor = color; 
+  newShape.type = 'text';
   // add shape to shapes array
   console.log(s);
   canvasState.addShape(newShape);
-  ctx = canvas.getContext('2d');
-  ctx.font = "20px Arial";
-  ctx.fillStyle = 'red';
-  ctx.fillText('HERE',40,100);
-  console.log('this is new');
 }
 /**
 * ImageTools.prototype.clear(canvas)
