@@ -28,13 +28,27 @@ function Shape(x, y, w, h, fill, canvas) {
   this.bottom = this.y + this.h;
   this.canvas_id = canvas;
   this.layer = shape_counter;
+  this.type;
   shape_counter++;
 }
 
 // Draws this shape to a given context
 Shape.prototype.draw = function(ctx) {
-  ctx.fillStyle = this.fill;
-  ctx.fillRect(this.x, this.y, this.w, this.h);
+  if (this.type === 'image')
+  {
+    var img_source = this.fill['image'];
+    var image = new Image();
+    image.src = img_source;
+    this.h = image.height;
+    this.w = image.width;
+    ctx.drawImage(image,this.x,this.y);
+  }
+  else
+  {
+    ctx.fillStyle = this.fill;
+    ctx.fillRect(this.x, this.y, this.w, this.h);
+  }
+
 }
 
 // Determine if a point is inside the shape's bounds
@@ -219,32 +233,9 @@ CanvasState.prototype.draw = function() {
       // We can skip the drawing of elements that have moved off the screen:
       if (shape.x > this.width || shape.y > this.height ||
           shape.x + shape.w < 0 || shape.y + shape.h < 0) continue;
-        var typeOf = shapes[i].fill instanceof Object;
-       if (typeOf && shapes[i].fill['image'])
-      {
-        //draw image
-        var x = shapes[i].x;
-        var y = shapes[i].y;
-        var image_src = shapes[i].fill['image'];
-        var image = new Image;
-        image.src = image_src;
-        shapes[i].w = image.width;
-        shapes[i].h = image.height;
-          ctx.drawImage(image,x,y);
-      }
-      if (typeOf && shapes[i].fill['text'])
-      {
-        ctx.font ="20px Arial";
-        ctx.fillStyle = 'red';
-        ctx.fillText("Shit",0,0);
-        console.log('got a match for text');
-      }
-      else
-      {
-        shapes[i].draw(ctx);
-      }
-    }
-    
+
+
+
     // draw selection
     // right now this is just a stroke along the edge of the selected Shape
     if (this.selection != null) {
@@ -253,11 +244,12 @@ CanvasState.prototype.draw = function() {
       var mySel = this.selection;
       ctx.strokeRect(mySel.x,mySel.y,mySel.w,mySel.h);
     }
+  }
     
     // ** Add stuff you want drawn on top all the time here **
     
     this.valid = true;
-  }
+  
 }
 
 
@@ -558,6 +550,7 @@ ImageTools.prototype.handleImage = function(e)
       console.log(i);
       var dataArray = {"image": i};
       var newImgShape = new Shape(0,0,i_obj.width,i_obj.height,dataArray,canvas);
+      newImgShape.type = 'image';
       console.log(newImgShape);
       s.addShape(newImgShape);
      $('#ie-file-input').hide();
