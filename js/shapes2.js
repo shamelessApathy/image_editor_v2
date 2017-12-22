@@ -42,6 +42,7 @@ Shape.prototype.draw = function(ctx) {
     this.h = image.height;
     this.w = image.width;
     ctx.drawImage(image,this.x,this.y);
+    return;
   }
   if (this.type === 'text')
   {
