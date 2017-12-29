@@ -1,3 +1,4 @@
+<img id='ie-image-hider' src=""/>
 <div class='container'>
 <h1> You are in the image editor template</h1>
 
@@ -59,6 +60,10 @@
 	</div>
 	<div class='ie-control'>
 		<button title='Demo Shapes' onClick='init()'>Demo Shapes</button>
+	</div>
+	<div class='ie-control'>
+		<label>Scale Image</label>
+		<input type='file' id='ie-scale-image'/>
 	</div>
 </div> 
 

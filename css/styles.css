@@ -22,13 +22,19 @@ canvas
 	z-index:10;
 	background:red;
 }
+#ie-image-hider
+{
+	position:absolute;
+	top:-1500px;
+	z-index:10;
+}
 #ie-controls-container
 {
 	position:fixed;
 	bottom:10px;
 	left:20px;
 	height:100px;
-	width:50%;
+	width:70%;
 	border:solid 2px black;
 	z-index:10;
 }

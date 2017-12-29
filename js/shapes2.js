@@ -82,6 +82,16 @@ Shape.prototype.draw = function(ctx) {
     }
 
   }
+  if (this.type === 'scale')
+  {
+    canvas = document.getElementById('canvas1');
+    var image_source = this.fill['image'];
+    var image = new Image();
+    image.src = image_source;
+      ctx.drawImage(image, 0, 0, canvas.width,    canvas.height,     // source rectangle
+                     0, 0, canvas.width, canvas.height); // destination rectangle
+
+  }
   else
   {
     ctx.fillStyle = this.fill;
@@ -332,9 +342,11 @@ function ImageTools(canvas)
   this.selector_mode = false;
   // Original Canvas State
   this.canvasState = s;
+  this.image_hider = document.getElementById('ie-image-hider');
   this.selectorCanvas = document.getElementById('selector-canvas');
   this.file_input = document.getElementById('ie-file-input');
   this.text_input = document.getElementById('ie-text-input');
+  this.input_scale_image = document.getElementById('ie-scale-image');
   this.button_new_layer = $('#ie-new-layer');
   this.button_remove_selected = $('#ie-remove-shape');
   this.button_selector_mode = $('#ie-selector-mode');
@@ -347,6 +359,7 @@ function ImageTools(canvas)
   this.button_add_text = $('#ie-add-text');
 
   // Listeners
+  $('#ie-scale-image').change(this.scaleImage);
   $('#ie-image').change(this.handleImage);
   $(this.button_upload_unhide).on('click', function(){
     $(this.file_input).css({"display":"block"});
@@ -846,6 +859,55 @@ ImageTools.prototype.removeSelected = function()
   {
     s.removeShape(selected);
   }
+}
+
+
+/**
+* ImageTools,prototype.scaleImage
+* @param image - the image to be scaled
+* Scales image to canvas while maintaining aspect ratio is the goal
+*
+*/
+ImageTools.prototype.scaleImage = function(e)
+{
+  console.log('in the scale image function');
+  var image_hider = document.getElementById('ie-image-hider');
+  image_hider.setAttribute('src', e.target.files[0]);
+  console.log(image_hider.src);
+  target = e.target;
+
+
+      // This function mounts image onto HMTL5 Canvas
+
+        var reader = new FileReader();
+        reader.onload = function(event)
+        {
+            //var img = new Image();
+            //var current_img_height =  0;
+            function objectifyImage(i) 
+        {
+            var img_obj = new Image();
+            img_obj.src = i;
+            orig_image = img_obj;
+            return img_obj;
+        }  
+
+      var canvas = document.getElementById('canvas1');
+      var context = canvas.getContext('2d');
+      i = event.target.result;
+      i_obj = objectifyImage(i);
+      console.log(i);
+      var dataArray = {"image": i};
+      var newImgShape = new Shape(0,0,canvas.width,canvas.height,dataArray,canvas);
+      newImgShape.type = 'scale';
+      newImgShape.scaleHeight = image_hider.height;
+      newImgShape.scaleWidth = image_hider.width;
+      console.log(newImgShape);
+      s.addShape(newImgShape);
+
+      }
+
+  reader.readAsDataURL(e.target.files[0]);
 }
 
 var imagetools = new ImageTools(document.getElementById('canvas1'));
