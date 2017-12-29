@@ -57,6 +57,9 @@
 	<div class='ie-control'>
 		<button title='Add Text' class='ie-icon' id='ie-text'>Add Text</button>
 	</div>
+	<div class='ie-control'>
+		<button title='Demo Shapes' onClick='init()'>Demo Shapes</button>
+	</div>
 </div> 
 
 

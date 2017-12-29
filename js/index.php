@@ -1,0 +1,1 @@
+<h1>Yoou are in gifshot index</h1>

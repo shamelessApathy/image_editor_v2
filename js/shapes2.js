@@ -189,11 +189,6 @@ function CanvasState(canvas) {
   canvas.addEventListener('mouseup', function(e) {
     myState.dragging = false;
   }, true);
-  // double click for making new shapes
-  canvas.addEventListener('dblclick', function(e) {
-    var mouse = myState.getMouse(e);
-    myState.addShape(new Shape(mouse.x - 10, mouse.y - 10, 20, 20, 'rgba(0,255,0,.6)'));
-  }, true);
   
   // **** Options! ****
   
@@ -320,7 +315,7 @@ CanvasState.prototype.getMouse = function(e) {
 
 // If you dont want to use <body onLoad='init()'>
 // You could uncomment this init() reference and place the script reference inside the body tag
-init();
+//init();
 
 function init() {
   s = new CanvasState(document.getElementById('canvas1'));
@@ -371,6 +366,7 @@ function ImageTools(canvas)
   }.bind(this))
   $(this.button_add_text).on('click', function(){
     this.addText(this.canvasState, this.canvas);
+    $('#ie-text-input').hide();
   }.bind(this));
 
   bState = this;
@@ -880,5 +876,19 @@ var outsideLayerDown = function(element)
   console.log(element);
   imagetools.layerPriorityDown(element);
 }
-console.log(s.shapes);
 
+
+
+
+  // this makes the bpad buttons container draggable
+   /* this.draggableButtons = document.getElementById('button-dragtab');
+    this.draggableButtons.addEventListener('touchmove', function(event) {
+    console.log('drag function firing');
+    var touch = event.targetTouches[0];
+    //bpad container
+    this.buttonContainer = document.getElementsByClassName('bpad-buttons-container')[0];
+    // Place element where the finger is
+    this.buttonContainer.style.left = touch.pageX-25 + 'px';
+    this.buttonContainer.style.top = touch.pageY-25 + 'px';
+    event.preventDefault();
+  }, false);*/
