@@ -1,4 +1,5 @@
 <img id='ie-image-hider' src=""/>
+<div id='ie-resize-hider'></div>
 <div class='container'>
 <h1> You are in the image editor template</h1>
 

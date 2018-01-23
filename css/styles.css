@@ -99,3 +99,8 @@ canvas
 	padding:5px;
 	display:none;
 }
+#ie-resize-hider
+{
+	margin-top:-1000px;
+	position:absolute;
+}

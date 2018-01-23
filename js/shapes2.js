@@ -12,7 +12,7 @@
 var s;
 var selector_canvas;
 var shape_counter = 0;
-function Shape(x, y, w, h, fill, canvas) {
+function Shape(x, y, w, h, fill, canvas, type = null) {
   // This is a very simple and unsafe constructor. All we're doing is checking if the values exist.
   // "x || 0" just means "if there is a value for x, use that. Otherwise use 0."
   // But we aren't checking anything else! We could put "Lalala" for the value of x 
@@ -28,7 +28,14 @@ function Shape(x, y, w, h, fill, canvas) {
   this.bottom = this.y + this.h;
   this.canvas_id = canvas;
   this.layer = shape_counter;
-  this.type;
+  this.type = type;
+
+  if (this.type === "scale")
+  {
+      
+      console.log('inside scale function prototype');
+
+  }
   shape_counter++;
 }
 
@@ -84,12 +91,13 @@ Shape.prototype.draw = function(ctx) {
   }
   if (this.type === 'scale')
   {
-    canvas = document.getElementById('canvas1');
-    var image_source = this.fill['image'];
+    var img_source = this.fill['image'];
     var image = new Image();
-    image.src = image_source;
-      ctx.drawImage(image, 0, 0, canvas.width,    canvas.height,     // source rectangle
-                     0, 0, canvas.width, canvas.height); // destination rectangle
+    image.src = img_source;
+    image.height = this.h;
+    image.width = this.w;
+    ctx.drawImage(image,this.x,this.y);
+    return;
 
   }
   else
@@ -871,11 +879,28 @@ ImageTools.prototype.removeSelected = function()
 ImageTools.prototype.scaleImage = function(e)
 {
   console.log('in the scale image function');
-  var image_hider = document.getElementById('ie-image-hider');
-  image_hider.setAttribute('src', e.target.files[0]);
-  console.log(image_hider.src);
-  target = e.target;
-
+ 
+var dataArray;
+var virgin_image;
+var mount_image = function() {
+      var canvas = document.getElementById('canvas1');
+      var scaleHeight= $('#ie-image-hider').height(); 
+      var scaleWidth = $('#ie-image-hider').width();
+      console.log("before:"+scaleWidth);
+      var hRatio = canvas.width / scaleWidth;
+      var vRatio = canvas.height / scaleHeight;
+      var ratio  = Math.min ( hRatio, vRatio );
+      var calcWidth = scaleWidth * hRatio;
+      var calcHeight = scaleHeight * vRatio;
+      // resizing image permanentantly here then mounting in hidden div
+      var resized_image = new Image();
+      resized_image.src = virgin_image.src;
+      console.log(virgin_image);
+      $('#ie-resize-hider').html(resized_image);
+      console.log("Height: "+ calcHeight);
+      console.log("Width: " + calcWidth);
+      console.log(resized_image);
+    }
 
       // This function mounts image onto HMTL5 Canvas
 
@@ -889,25 +914,33 @@ ImageTools.prototype.scaleImage = function(e)
             var img_obj = new Image();
             img_obj.src = i;
             orig_image = img_obj;
+            virgin_image = img_obj;
             return img_obj;
+
         }  
 
       var canvas = document.getElementById('canvas1');
       var context = canvas.getContext('2d');
       i = event.target.result;
       i_obj = objectifyImage(i);
+      var image_hider = document.getElementById('ie-image-hider');
+              image_hider.setAttribute('src', i);
+              $(image_hider).on('load', mount_image);
       console.log(i);
-      var dataArray = {"image": i};
-      var newImgShape = new Shape(0,0,canvas.width,canvas.height,dataArray,canvas);
-      newImgShape.type = 'scale';
-      newImgShape.scaleHeight = image_hider.height;
-      newImgShape.scaleWidth = image_hider.width;
-      console.log(newImgShape);
-      s.addShape(newImgShape);
+      
+      target = e.target;
+      dataArray = {"image": i};
 
+
+
+
+      //  var newImgShape = new Shape(0,0,calcWidth,calcHeight,dataArray,canvas, 'scale');
+      //s.addShape(newImgShape);
       }
 
+
   reader.readAsDataURL(e.target.files[0]);
+  
 }
 
 var imagetools = new ImageTools(document.getElementById('canvas1'));
