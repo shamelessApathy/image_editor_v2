@@ -4,10 +4,9 @@
 <h1> You are in the image editor template</h1>
 
 
-<canvas id="canvas1" width="400" height="300">
+<canvas id="canvas1" width="700" height="500">
     This text is displayed if your browser does not support HTML5 Canvas.
    </canvas>
-   <canvas id='selector-canvas' width="400" height="300"></canvas>
 
 
 <div id='ie-text-input'>
@@ -40,11 +39,6 @@
 		</div>
 	</div>
 	<div class='ie-control'>
-		<button id='ie-selector-mode'>Draw Selector</button>
-		<button id='ie-selector-mode-off'>Selector Off</button>
-		<button id='ie-clear-selector'>Clear</button>
-	</div>
-	<div class='ie-control'>
 		<button id='ie-remove-shape'>Remove Selected</button>
 	</div>
 	<div class='ie-control'>
@@ -62,9 +56,13 @@
 	<div class='ie-control'>
 		<button title='Demo Shapes' onClick='init()'>Demo Shapes</button>
 	</div>
-	<div class='ie-control'>
+	<div class='ie-control' style='width:210px;'>
 		<label>Scale Image</label>
 		<input type='file' id='ie-scale-image'/>
+		<label>Shrink to Canvas</label>
+		<input type='radio' class='ie-scale-choose' name='scale-action' value='shrink' id='ie-shrink'/><br>
+		<label>Resize Canvas to Fit Image</label>
+		<input type='radio' name='scale-action' class='ie-scale-choose' value='resize' id='ie-scale-resize'/>
 	</div>
 </div> 
 
