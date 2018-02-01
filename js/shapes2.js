@@ -96,7 +96,7 @@ Shape.prototype.draw = function(ctx) {
     image.src = img_source;
     image.height = this.h;
     image.width = this.w;
-    ctx.drawImage(image,this.x,this.y, this.h, this.w);
+    ctx.drawImage(image,this.x,this.y, this.w, this.h);
     return;
 
   }
