@@ -880,7 +880,7 @@ ImageTools.prototype.shrinkImage = function(event)
   console.log('in the shrinkImage() function');
   console.log("Event: " + event);
 
-  // This function mounts image onto HMTL5 Canvas
+  // This function mounts image onto HMTL5 Canvas changing its dimensions to fit inside it
         var reader = new FileReader();
         reader.onload = function(event)
         {
@@ -903,22 +903,9 @@ ImageTools.prototype.shrinkImage = function(event)
           i = event.target.result;
           image_hider.setAttribute('src', i);
 
-         /* 
-          var context = canvas.getContext('2d');
-          
-          i_obj = objectifyImage(i);
-
-          console.log("obj height: " + i.height);
-      
-          target = event.target;
-         */
-
         }
 
 
-      //var newImgShape = new Shape(0,0,calcWidth,calcHeight,dataArray,canvas, 'scale');
-      //s.addShape(newImgShape);
-      //}
 
 
   reader.readAsDataURL(event.target.files[0]);
@@ -936,6 +923,66 @@ ImageTools.prototype.resizeCanvasImage = function(event)
 {
     console.log('in the resizeCanvasImage() function');
     console.log("Event: " + event);
+    var windowWidth = document.documentElement.clientWidth;
+    var windowHeight = document.documentElement.clientHeight;
+    windowWidth = windowWidth - (windowWidth * .1);
+    windowHeight = windowHeight - (windowHeight * .1);
+
+    console.log("Window Width: "+ windowWidth);
+    console.log("Window Height: "+ windowHeight);
+      // This function mounts image onto HMTL5 Canvas, making canvas big enough to fit image in fullscreen, or resize image to fit fullscreen canvas
+        var reader = new FileReader();
+        reader.onload = function(event)
+        {
+          var canvas = document.getElementById('canvas1');
+          var image_hider = document.getElementById('ie-image-hider');
+          image_hider.onload = function()
+          {
+            console.log(image_hider.width);
+            if (image_hider.width > windowWidth || image_hider.height > windowHeight)
+            {
+              shapes = s.shapes;
+              console.log('picture is too big as it is');
+              canvas.height = windowHeight;
+              canvas.width = windowWidth;
+              s = new CanvasState(canvas);
+              s.shapes = shapes;
+              s.valid=false;
+              
+              var wRatio = windowWidth /  image_hider.width;
+              var hRatio = windowHeight / image_hider.height;
+              console.log('Height Ratio: ' + hRatio);
+              console.log('Width Ratio: ' + wRatio);
+              var calcWidth = image_hider.width * wRatio;
+              var calcHeight = image_hider.height * hRatio;
+              var dataArray = {"image": i};
+              var newImgShape = new Shape(0,0,calcWidth,calcHeight,dataArray,canvas, 'scale');
+              s.addShape(newImgShape);
+            }
+            else
+            {
+              console.log('inside the else')
+              shapes = s.shapes;
+              canvas.height = image_hider.height;
+              canvas.width = image_hider.width;
+              s = new CanvasState(canvas);
+              s.shapes = shapes;
+              s.valid = false;
+              // Mount imaGE TO tailored canvas
+              var dataArray = {"image": i};
+              var newImgShape = new Shape(0,0,canvas.width,canvas.height, dataArray, canvas, 'scale');
+              s.addShape(newImgShape);
+            }
+            
+
+          };
+          i = event.target.result;
+          image_hider.setAttribute('src', i);
+
+
+          }
+          reader.readAsDataURL(event.target.files[0]);
+      
 }
 /**
 * ImageTools,prototype.scaleImage

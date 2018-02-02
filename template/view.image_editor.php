@@ -4,7 +4,7 @@
 <h1> You are in the image editor template</h1>
 
 
-<canvas id="canvas1" width="700" height="500">
+<canvas id="canvas1" width="400" height="300">
     This text is displayed if your browser does not support HTML5 Canvas.
    </canvas>
 
@@ -41,14 +41,9 @@
 	<div class='ie-control'>
 		<button id='ie-remove-shape'>Remove Selected</button>
 	</div>
+
 	<div class='ie-control'>
-		<button id='ie-new-layer'>New Layer</button><br>
-		<input type='text' id='ie-layer-color' placeholder='color'/>
-		<input type='number' id='ie-layer-width' placeholder='width'/>
-		<input type='number' id='ie-layer-height' placeholder='height'/>
-	</div>
-	<div class='ie-control'>
-		<button title='Upload' class='ie-icon' id='ie-upload'>Upload</button>
+		<button title='Upload' class='ie-icon' id='ie-upload'>Insert</button>
 	</div>
 	<div class='ie-control'>
 		<button title='Add Text' class='ie-icon' id='ie-text'>Add Text</button>
@@ -63,6 +58,12 @@
 		<input type='radio' class='ie-scale-choose' name='scale-action' value='shrink' id='ie-shrink'/><br>
 		<label>Resize Canvas to Fit Image</label>
 		<input type='radio' name='scale-action' class='ie-scale-choose' value='resize' id='ie-scale-resize'/>
+	</div>
+	<div class='ie-control' style='width:200px;'>
+		<button id='ie-new-layer'>New Layer</button><br>
+		<input type='text' id='ie-layer-color' placeholder='color'/>
+		<input type='number' id='ie-layer-width' placeholder='width'/>
+		<input type='number' id='ie-layer-height' placeholder='height'/>
 	</div>
 </div> 
 

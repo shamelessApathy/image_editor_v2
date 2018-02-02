@@ -33,7 +33,7 @@ canvas
 }
 #ie-controls-container
 {
-	position:fixed;
+	position:absolute;
 	bottom:10px;
 	left:20px;
 	height:100px;
@@ -58,11 +58,10 @@ canvas
 }
 .ie-control
 {
-	width:175px;
+	width:100px;
 	border-right:solid black 1px;
 	height:98px;
-	float:left;
-	
+	float:left;	
 }
 #ie-shapes-container
 {
