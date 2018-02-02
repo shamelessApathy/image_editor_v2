@@ -24,6 +24,14 @@ canvas
 	z-index:10;
 	background:red;
 }
+#drag-handle
+{
+	position:absolute;
+	margin-top:-20px;
+	height:20px;
+	width:50px;
+	background-color:red;
+}
 #ie-image-hider
 {
 	position:absolute;

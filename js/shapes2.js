@@ -1046,17 +1046,5 @@ var outsideLayerDown = function(element)
 }
 
 
-
-
-  // this makes the bpad buttons container draggable
-   /* this.draggableButtons = document.getElementById('button-dragtab');
-    this.draggableButtons.addEventListener('touchmove', function(event) {
-    console.log('drag function firing');
-    var touch = event.targetTouches[0];
-    //bpad container
-    this.buttonContainer = document.getElementsByClassName('bpad-buttons-container')[0];
-    // Place element where the finger is
-    this.buttonContainer.style.left = touch.pageX-25 + 'px';
-    this.buttonContainer.style.top = touch.pageY-25 + 'px';
-    event.preventDefault();
-  }, false);*/
+$('#ie-controls-container').draggable();
+$('#ie-shapes-container').draggable();

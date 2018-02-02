@@ -27,7 +27,7 @@
 		<h4>Choose your image to edit</h4>
 		<input type='file' id='ie-image' name='ie-image'/>
 		</div>
-<div id='ie-controls-container'>
+<div id='ie-controls-container' class='ui-draggable' >
 	<div class='ie-control' id='ie-resize'>
 		<button id='ie-start-resize'>Resize</button>
 		<div id='ie-resize-spec-form'>
