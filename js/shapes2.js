@@ -630,7 +630,6 @@ ImageTools.prototype.resizeCanvas = function()
 {
   var shapes = s.shapes;
   var canvas = document.getElementById('canvas1');
-  var selectorCanvas = document.getElementById('selector-canvas');
   console.log('inside resizeCanvas() function');
   var width = $('#ie-resize-width').val();
   var height = $('#ie-resize-height').val();
@@ -642,11 +641,10 @@ ImageTools.prototype.resizeCanvas = function()
   {
     canvas.height = height;
     canvas.width = width;
-    selectorCanvas.height = height;
-    selectorCanvas.width = width;
     s = new CanvasState(canvas);
     s.shapes = shapes;
     s.valid = false;
+    $('#ie-resize-spec-form').hide();
   }
 }
 ImageTools.prototype.findShape = function(shapeID)
