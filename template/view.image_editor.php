@@ -22,10 +22,27 @@
 	<input type='number' id='ie-text-width' placeholder='100'/><br>
 	<button type='button' id='ie-add-text'>Add Text</button>
 </div>
+<div id='ie-scale-image-container'>
+	<span class='ie-close'><button onclick="closeDiv('ie-scale-image-container')">X</button></span>
+	<p>Upload scaled image</p>
+		<input type='file' id='ie-scale-image'/><br>
+		<label>Shrink Image</label>
+		<input type='radio' class='ie-scale-choose' name='scale-action' value='shrink' id='ie-shrink'/><br>
+		<label>Keep Natural</label>
+		<input type='radio' name='scale-action' class='ie-scale-choose' value='resize' id='ie-scale-resize'/>
+</div>
 <div id='ie-file-input'>
 		<span class='ie-close'><button>X</button></span>
 		<h4>Choose your image to edit</h4>
 		<input type='file' id='ie-image' name='ie-image'/>
+		</div>
+		<div id='ie-new-layer-holder'>
+			<span class='ie-close'><button onclick="closeDiv('ie-new-layer-holder')">X</button></span>
+			<p>New Layer Options</p>
+		<input type='color' id='ie-layer-color' placeholder='color'/>
+		<input type='number' id='ie-layer-width' placeholder='width'/>
+		<input type='number' id='ie-layer-height' placeholder='height'/>
+		<button type='button' id='ie-button-add-new-layer'>Add Layer</button>
 		</div>
 <div id='ie-controls-container' class='ui-draggable' >
 	<div class='ie-control' id='ie-resize'>
@@ -52,18 +69,10 @@
 		<button title='Demo Shapes' onClick='init()'>Demo Shapes</button>
 	</div>
 	<div class='ie-control'>
-		<label>Scale Image</label>
-		<input type='file' id='ie-scale-image'/>
-		<label>Shrink to Canvas</label>
-		<input type='radio' class='ie-scale-choose' name='scale-action' value='shrink' id='ie-shrink'/><br>
-		<label>Resize Canvas to Fit Image</label>
-		<input type='radio' name='scale-action' class='ie-scale-choose' value='resize' id='ie-scale-resize'/>
+		<button id='ie-button-scale-image'>Scale Image</button>
 	</div>
-	<div class='ie-control'>
+	<div class='ie-control' style='border-bottom:none;'>
 		<button id='ie-new-layer'>New Layer</button><br>
-		<input type='text' id='ie-layer-color' placeholder='color'/>
-		<input type='number' id='ie-layer-width' placeholder='width'/>
-		<input type='number' id='ie-layer-height' placeholder='height'/>
 	</div>
 </div> 
 

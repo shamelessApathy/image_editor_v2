@@ -356,6 +356,7 @@ function ImageTools(canvas)
   this.text_input = document.getElementById('ie-text-input');
   this.input_scale_image = document.getElementById('ie-scale-image');
   this.button_new_layer = $('#ie-new-layer');
+  this.button_add_layer = $('#ie-button-add-new-layer');
   this.button_remove_selected = $('#ie-remove-shape');
   this.button_selector_mode = $('#ie-selector-mode');
   this.button_selector_mode_off = $('#ie-select-mode-off'); 
@@ -365,8 +366,12 @@ function ImageTools(canvas)
   this.button_upload_unhide = $('#ie-upload');
   this.button_text = $('#ie-text');
   this.button_add_text = $('#ie-add-text');
+  this.button_scale_image = $('#ie-button-scale-image');
 
   // Listeners
+  this.button_scale_image.on('click', function(){
+    $('#ie-scale-image-container').show();
+  });
   $('#ie-scale-image').change(this.scaleImage);
   $('#ie-image').change(this.handleImage);
   $(this.button_upload_unhide).on('click', function(){
@@ -811,20 +816,26 @@ ImageTools.prototype.zIndex = function(element, param)
 */
 ImageTools.prototype.newLayer = function()
 {
-  var color = $('#ie-layer-color').val();
-  var newHeight = $('#ie-layer-height').val();
-  var newWidth = $('#ie-layer-width').val();
-  if (newHeight === null)
+  $('#ie-new-layer-holder').show();
+  var makeLayer = function()
   {
-    newHeight = 10;
+    var color = $('#ie-layer-color').val();
+    var newHeight = $('#ie-layer-height').val();
+    var newWidth = $('#ie-layer-width').val();
+    if (newHeight === null)
+    {
+      newHeight = 10;
+    }
+    if (newWidth === null)
+    {
+      newWidth = 10;
+    }
+    var newShape = new Shape(0,0,newWidth,newHeight,color);
+    s.addShape(newShape);
+    console.log('in the makelayer function!');
+    $('#ie-new-layer-holder').hide();
   }
-  if (newWidth === null)
-  {
-    newWidth = 10;
-  }
-  var newShape = new Shape(0,0,newWidth,newHeight,color);
-  s.addShape(newShape);
-  console.log('in the new layer function!');
+  $('#ie-button-add-new-layer').on('click', makeLayer);
 }
 
 
@@ -1013,6 +1024,7 @@ ImageTools.prototype.scaleImage = function(e)
       default : console.log('in the default');
     break;
   }
+  $('#ie-scale-image-container').hide();
   
 }
 
@@ -1044,7 +1056,14 @@ var outsideLayerDown = function(element)
   console.log(element);
   imagetools.layerPriorityDown(element);
 }
+var closeDiv = function(id)
+{
+  target = id;
+  domElement = document.getElementById(target);;
+  $(domElement).remove();
+}
 
 
 $('#ie-controls-container').draggable();
 $('#ie-shapes-container').draggable();
+
