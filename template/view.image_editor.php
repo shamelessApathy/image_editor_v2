@@ -51,7 +51,7 @@
 	<div class='ie-control'>
 		<button title='Demo Shapes' onClick='init()'>Demo Shapes</button>
 	</div>
-	<div class='ie-control' style='width:210px;'>
+	<div class='ie-control'>
 		<label>Scale Image</label>
 		<input type='file' id='ie-scale-image'/>
 		<label>Shrink to Canvas</label>
@@ -59,7 +59,7 @@
 		<label>Resize Canvas to Fit Image</label>
 		<input type='radio' name='scale-action' class='ie-scale-choose' value='resize' id='ie-scale-resize'/>
 	</div>
-	<div class='ie-control' style='width:200px;'>
+	<div class='ie-control'>
 		<button id='ie-new-layer'>New Layer</button><br>
 		<input type='text' id='ie-layer-color' placeholder='color'/>
 		<input type='number' id='ie-layer-width' placeholder='width'/>

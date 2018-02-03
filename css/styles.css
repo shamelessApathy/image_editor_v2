@@ -44,8 +44,8 @@ canvas
 	position:absolute;
 	bottom:10px;
 	left:20px;
-	height:100px;
-	width:70%;
+	height:800px;
+	width:150px;
 	border:solid 2px black;
 	z-index:10;
 }
@@ -58,7 +58,7 @@ canvas
 	display:none;
 }
 #ie-resize-spec-form
-{
+{ 
 	display:none;
 	position:absolute;
 	background:#ccc;
@@ -66,10 +66,10 @@ canvas
 }
 .ie-control
 {
-	width:100px;
-	border-right:solid black 1px;
+	width:150px;
+	border-bottom:solid black 1px;
 	height:98px;
-	float:left;	
+	display:block;
 }
 #ie-shapes-container
 {
@@ -113,4 +113,16 @@ canvas
 {
 	margin-top:-1000px;
 	position:absolute;
+}
+#ie-layer-color
+{
+	width:100%;
+}
+#ie-layer-width
+{
+	width:100%;
+}
+#ie-layer-height
+{
+	width:100%;
 }
