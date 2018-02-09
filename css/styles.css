@@ -64,7 +64,7 @@ canvas
 #ie-controls-container
 {
 	position:absolute;
-	bottom:10px;
+	top:20px;
 	left:20px;
 	height:700px;
 	width:150px;

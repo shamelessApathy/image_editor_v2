@@ -968,13 +968,17 @@ ImageTools.prototype.resizeCanvasImage = function(event)
               s = new CanvasState(canvas);
               s.shapes = shapes;
               s.valid=false;
-              
-              var wRatio = windowWidth /  image_hider.width;
-              var hRatio = windowHeight / image_hider.height;
-              console.log('Height Ratio: ' + hRatio);
-              console.log('Width Ratio: ' + wRatio);
-              var calcWidth = image_hider.width * wRatio;
-              var calcHeight = image_hider.height * hRatio;
+              var aspectRatio;
+              if ( image_hider.width > image_hider.height)
+              {
+                aspectRatio = Math.round(image_hider.height / image_hider.width);
+              }
+              if ( image_hider.height > image_hider.width)
+              {
+                aspectRatio = Math.round(image_hider.width / image_hider.height);
+              }
+              var calcWidth = image_hider.width * aspectRatio;
+              var calcHeight = image_hider.height * aspectRatio;
               var dataArray = {"image": i};
               var newImgShape = new Shape(0,0,calcWidth,calcHeight,dataArray,canvas, 'scale');
               s.addShape(newImgShape);
