@@ -1,7 +1,8 @@
 <img id='ie-image-hider' src=""/>
 <div id='ie-resize-hider'></div>
 <div class='container'>
-<h1> You are in the image editor template</h1>
+<h1 style='text-align:center;'> You are in the image editor template</h1>
+<p style='text-align:center;'>Remeber to hit the "Demo Shapes" button to start!!!</p>
 
 
 <canvas id="canvas1" width="400" height="300">

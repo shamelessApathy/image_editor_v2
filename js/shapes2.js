@@ -898,15 +898,26 @@ ImageTools.prototype.shrinkImage = function(event)
           image_hider.onload = function()
           {
             console.log(image_hider.width);
+            var aspectRatio = function(w,h){
+              if (w > h)
+              {
+                var aR = h/w;
+              }
+              if (h > w)
+              {
+                var aR = w/h;
+              }
+              return aR;
+            }
+            var theAspectRatio = aspectRatio(image_hider.width, image_hider.height);
+            console.log(theAspectRatio);
             var canvas = document.getElementById('canvas1');
-            var wRatio = canvas.width /  image_hider.width;
-            var hRatio = canvas.height / image_hider.height;
-            console.log('Height Ratio: ' + hRatio);
-            console.log('Width Ratio: ' + wRatio);
-            var calcWidth = image_hider.width * wRatio;
-            var calcHeight = image_hider.height * hRatio;
+            var newWidth = Math.round(canvas.width * theAspectRatio);
+            var newHeight = Math.round(canvas.height * theAspectRatio);
+            console.log("NEW WIDTH:" + newWidth);
+            console.log('NEW HEIGHT:' + newHeight);
             var dataArray = {"image": i};
-            var newImgShape = new Shape(0,0,calcWidth,calcHeight,dataArray,canvas, 'scale');
+            var newImgShape = new Shape(0,0,newWidth,newHeight,dataArray,canvas, 'scale');
             s.addShape(newImgShape);
           };
           i = event.target.result;
