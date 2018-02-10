@@ -84,10 +84,8 @@ Shape.prototype.draw = function(ctx) {
         textX = this.x+this.w/2-ctx2d.measureText(text_string).width/2;
         textY = this.y+this.h/2;
         ctx2d.fillText(text_string, this.x+10, this.y+10);
-    } else {
-        // Do something meaningful
     }
-
+    return;
   }
   if (this.type === 'scale')
   {
@@ -438,7 +436,7 @@ ImageTools.prototype.addText = function(canvasState, canvas)
   newShape.type = 'text';
   // add shape to shapes array
   console.log(s);
-  canvasState.addShape(newShape);
+  s.addShape(newShape);
 }
 /**
 * ImageTools.prototype.clear(canvas)
