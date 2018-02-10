@@ -343,7 +343,12 @@ function init() {
   s.addShape(new Shape(80,150,60,30, 'rgba(127, 255, 212, 1)'));
   s.addShape(new Shape(125,80,30,80, 'rgba(245, 222, 179, 1)'));
 }
-
+/**
+* Author: Brian Moniz
+* ImageTools uses the CanvasState prototype to manipulate images within the HTML5 canvas element within the browser
+* Site: http://slcutahdesign.com
+* 
+*/
 function ImageTools(canvas)
 {
   this.canvas = canvas;
@@ -903,9 +908,10 @@ ImageTools.prototype.shrinkImage = function(event)
               {
                 var aR = h/w;
               }
-              if (h > w)
+              else
               {
                 var aR = w/h;
+                console.log("AR:"+aR);
               }
               return aR;
             }
@@ -919,6 +925,8 @@ ImageTools.prototype.shrinkImage = function(event)
             var dataArray = {"image": i};
             var newImgShape = new Shape(0,0,newWidth,newHeight,dataArray,canvas, 'scale');
             s.addShape(newImgShape);
+            console.log('changing image hider source');
+            image_hider.setAttribute('src','');
           };
           i = event.target.result;
           image_hider.setAttribute('src', i);
